@@ -6,8 +6,8 @@
 
 	"content_scripts": [
     	{
-      "matches": ["*"],
-      "js": ["borderify.js"]
+      "matches": ["<all_urls>"],
+      "js": ["src/script.js"]
     }
   ]
 }
