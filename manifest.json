@@ -1,0 +1,14 @@
+{
+	"manifest_version":2,
+	"name":"ZXpath",
+	"version":"0.1",
+	"description":"easily get intellijent identifier for web elements. Meant to make automation testing with selenium faster",
+
+	"content_scripts": [
+    	{
+      "matches": ["*"],
+      "js": ["borderify.js"]
+    }
+  ]
+}
+
