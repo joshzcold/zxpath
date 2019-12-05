@@ -9,4 +9,4 @@ Get Ze-Xpath... get it?
 - ZXPath takes options for: Selector Priority, Generated Code Language, Text output, variable creation.
 
 # Diagram
-(ZXpath design)[docs/ZXpath-Design.png]
+![ZXpath design](/docs/ZXpath-Design.png)
