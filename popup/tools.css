@@ -1,5 +1,5 @@
 html, body {
-  width: 200px;
+  flex: auto;
 }
 
 .hidden {
@@ -14,12 +14,8 @@ html, body {
   cursor: pointer;
 }
 
-.beast:hover {
-  background-color: #CFF2F2;
-}
-
-.beast {
-  background-color: #E5F2F2;
+.button:hover {
+  background-color: lightgray;
 }
 
 .reset {
