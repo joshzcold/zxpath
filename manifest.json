@@ -20,8 +20,8 @@
         "dark": "icons/beasts-32.png",
         "size": 32
     }],
-    "default_title": "Beastify",
-    "default_popup": "popup/choose_beast.html"
+    "default_title": "ZXpath",
+    "default_popup": "popup/tools.html"
   },
 
   "web_accessible_resources": [
