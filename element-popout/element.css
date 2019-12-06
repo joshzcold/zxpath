@@ -1,0 +1,22 @@
+.btn-secondary { 
+    width: 20px; 
+    height: 20px; 
+    margin: 10px 10px 10px 10px;
+    padding: 0px 0px; 
+    border-radius: 15px; 
+    text-align: center; 
+    background-color: green;
+} 
+
+svg {
+    margin: -1px 0px 0px -1px;
+    display: block;
+    width: 20px;
+    height: 20px;
+    color: white;
+    /* background-color: orange; */
+}
+
+#dropdown-tooltip {
+    padding: 10px 10px 10px 10px;
+}
