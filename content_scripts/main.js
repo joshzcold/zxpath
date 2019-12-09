@@ -3,6 +3,8 @@
     return;
   }
   window.hasRun = true;
+  
+  let xpathArray = new Array();
 
   function selectMode() {
     console.log("SELECT MODE")
@@ -46,7 +48,7 @@
        }
     });
     
-    return validateByData(dataArray, element.nodeName);
+    return validateXpathData(dataArray, clickedElement.nodeName);
   }
   
   /**
@@ -56,7 +58,6 @@
    * Called by getByData() in order to validate xpaths.
    */
   function validateXpathData(dataArray, elementType) {
-      let xpathArray = new Array();
       dataArray.forEach(att =>{
           let xpath = "//" + elementType + "[@" + att.attribute + " = \'" + att.value + "\']";
           
@@ -69,5 +70,33 @@
       
       return xpathArray;
   }
+
+  function generateCode(language) {
+    let javaCodeArray = new Array();
+    xpathArray.forEach(xpath =>{
+      let code = generateCodeByLanguage(language, xpath);
+      javaCodeArray.push(code);
+    });
+    console.log(javaCodeArray);
+    return javaCodeArray;
+  }
+
+  function generateCodeByLanguage(language, xpath) {
+      switch(language) {
+          case ("JAVA"): 
+              return "driver.findElement(By.xpath(\"" + xpath + "\"));";
+          case ("C#"): 
+              return "driver.findElement(By.xpath(\"" + xpath + "\"));";
+          case "PERL":
+              return "$driver->find_element(\'" + xpath + "\');";
+          case "PHP":
+              return "$driver->findElement(WebDriverBy::xpath(\'" + xpath + "\'));";
+          case "PYTHON":
+              return "driver.find_element_by_xpath(\"" + xpath + "\")";
+          case "RUBY":
+              return "@driver.find_element(:xpath,\"" + xpath + "\")"
+      }
+  }
+
 
 })();
