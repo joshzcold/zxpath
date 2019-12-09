@@ -4,7 +4,7 @@
   }
   window.hasRun = true;
   
-  let xpathArray = new Array();
+  let xpathObjects = new Array();
 
   function selectMode() {
     console.log("SELECT MODE")
@@ -33,14 +33,14 @@
     }
   });
   
-    /**
+ /**
    * @param {*} clickedElement 
    * 
    * Returns an array of valid Xpaths for the clickedElement
    */
   function getXpathData(clickedElement) {
     let dataArray = new Array();
-    const acceptable = ['id', 'name', 'alt', 'value', 'title', 'src', 'background', 'cite', 'color', 'data', 'href', 'label', 'list', 'pattern', 'placeholder', 'poster'];
+    const acceptable = ['id', 'name', 'alt', 'value', 'title', 'src', 'background', 'cite', 'color', 'data', 'href', 'label', 'list', 'pattern', 'placeholder', 'poster', 'baseuri'];
   
     acceptable.forEach(att => {
       if(clickedElement.hasAttribute(att)) {
@@ -58,6 +58,7 @@
    * Called by getByData() in order to validate xpaths.
    */
   function validateXpathData(dataArray, elementType) {
+    let xpathArray= new Array();
       dataArray.forEach(att =>{
           let xpath = "//" + elementType + "[@" + att.attribute + " = \'" + att.value + "\']";
           
@@ -67,16 +68,22 @@
               xpathArray.push(xpath);
           }
       });
+
+      let obj;
+      if(xpathArray == null) {
+           obj = {"topXpath": "NO VALID XPATH", "xpathList" : xpathArray};
+      } else {
+           obj = {"topXpath": xpathArray[0], "xpathList" : xpathArray};
+      }
       
-      return xpathArray;
+      xpathObjects.push(obj);
+      return obj;
   }
 
-  function generateCode(language) {
+  function generateCode(language, xpath) {
     let javaCodeArray = new Array();
-    xpathArray.forEach(xpath =>{
-      let code = generateCodeByLanguage(language, xpath);
-      javaCodeArray.push(code);
-    });
+    let code = generateCodeByLanguage(language, xpath);
+    javaCodeArray.push(code);
     console.log(javaCodeArray);
     return javaCodeArray;
   }
@@ -98,5 +105,5 @@
       }
   }
 
-
+  
 })();
