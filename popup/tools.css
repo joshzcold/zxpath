@@ -17,11 +17,3 @@ html, body {
 .button:hover {
   background-color: lightgray;
 }
-
-.reset {
-  background-color: #FBFBC9;
-}
-
-.reset:hover {
-  background-color: #EAEA9D;
-}

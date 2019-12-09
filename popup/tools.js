@@ -6,9 +6,21 @@ function listenForClicks() {
 document.addEventListener("click", (e) => {
 
 
-function sendCommand(tabs) {
+function sendSelectCommand(tabs) {
   browser.tabs.sendMessage(tabs[0].id, {
-    command: "beastify",
+    command: "select",
+    });
+}
+
+function sendDownloadCommand(tabs) {
+  browser.tabs.sendMessage(tabs[0].id, {
+    command: "download",
+    });
+}
+
+function sendSettingsCommand(tabs) {
+  browser.tabs.sendMessage(tabs[0].id, {
+    command: "settings",
     });
 }
 
@@ -18,9 +30,21 @@ function reportError(error) {
 console.error(`Could not beastify: ${error}`);
 }
 
+/**
+ * Parse click result from listener in popup
+ * specifically looking for elements in tools.html
+ */
 if (e.target.classList.contains("select")) {
 browser.tabs.query({active: true, currentWindow: true})
-.then(sendCommand)
+.then(sendSelectCommand)
+.catch(reportError);
+} else if (e.target.classList.contains("download")) {
+  browser.tabs.query({active: true, currentWindow: true})
+.then(sendDownloadCommand)
+.catch(reportError);
+} else if (e.target.classList.contains("settings")) {
+  browser.tabs.query({active: true, currentWindow: true})
+.then(sendSettingsCommand)
 .catch(reportError);
 }
 });
