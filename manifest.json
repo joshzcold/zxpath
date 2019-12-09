@@ -5,21 +5,16 @@
   "name": "ZXPath",
   "version": "1.0",
   "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/beastify",
-  "icons": {
-    "48": "icons/beasts-48.png"
-  },
 
   "permissions": [
     "activeTab"
   ],
 
   "browser_action": {
-    "default_icon": "icons/beasts-32.png",
-    "theme_icons": [{
-        "light": "icons/beasts-32-light.png",
-        "dark": "icons/beasts-32.png",
-        "size": 32
-    }],
+    "default_icon": {
+      "48": "icons/icon.svg",
+      "98": "icons/icon.svg"
+    },
     "default_title": "ZXpath",
     "default_popup": "popup/tools.html"
   }

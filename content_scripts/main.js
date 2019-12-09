@@ -6,6 +6,11 @@
 
   function selectMode() {
     console.log("SELECT MODE")
+    document.addEventListener("click", e => {
+      console.log("stop this click -> ",e)
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    })
   }
 
   function downloadPopup() {
