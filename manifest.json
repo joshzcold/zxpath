@@ -6,9 +6,11 @@
   "version": "1.0",
   "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/beastify",
 
-  "permissions": [
-    "activeTab"
-  ],
+  "content_scripts": [{
+    "all_frames": true,
+    "matches": ["<all_urls>"],
+    "js":["/content_scripts/select.js"]
+  }],
 
   "browser_action": {
     "default_icon": {
@@ -17,5 +19,6 @@
     },
     "default_title": "ZXpath",
     "default_popup": "popup/tools.html"
-  }
+  },
+  "permissions": ["activeTab","<all_urls>", "storage"]
 }

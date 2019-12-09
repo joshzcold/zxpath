@@ -1,3 +1,6 @@
+
+const browserAppData = this.browser || this.chrome;
+
 /**
 * Listen for clicks on the buttons, and send the appropriate message to
 * the content script in the page.
@@ -7,19 +10,19 @@ document.addEventListener("click", (e) => {
 
 
 function sendSelectCommand(tabs) {
-  browser.tabs.sendMessage(tabs[0].id, {
+  browserAppData.tabs.sendMessage(tabs[0].id, {
     command: "select",
     });
 }
 
 function sendDownloadCommand(tabs) {
-  browser.tabs.sendMessage(tabs[0].id, {
+  browserAppData.tabs.sendMessage(tabs[0].id, {
     command: "download",
     });
 }
 
 function sendSettingsCommand(tabs) {
-  browser.tabs.sendMessage(tabs[0].id, {
+  browserAppData.tabs.sendMessage(tabs[0].id, {
     command: "settings",
     });
 }
@@ -35,15 +38,15 @@ console.error(`Could not beastify: ${error}`);
  * specifically looking for elements in tools.html
  */
 if (e.target.classList.contains("select")) {
-browser.tabs.query({active: true, currentWindow: true})
+browserAppData.tabs.query({active: true, currentWindow: true})
 .then(sendSelectCommand)
 .catch(reportError);
 } else if (e.target.classList.contains("download")) {
-  browser.tabs.query({active: true, currentWindow: true})
+  browserAppData.tabs.query({active: true, currentWindow: true})
 .then(sendDownloadCommand)
 .catch(reportError);
 } else if (e.target.classList.contains("settings")) {
-  browser.tabs.query({active: true, currentWindow: true})
+  browserAppData.tabs.query({active: true, currentWindow: true})
 .then(sendSettingsCommand)
 .catch(reportError);
 }
@@ -65,6 +68,8 @@ console.error(`Failed to execute beastify content script: ${error.message}`);
 * and add a click handler.
 * If we couldn't inject the script, handle the error.
 */
-browser.tabs.executeScript({file: "/content_scripts/main.js"})
+browserAppData.tabs.executeScript({file: "/content_scripts/main.js"})
 .then(listenForClicks)
 .catch(reportExecuteScriptError);
+
+browserAppData.tabs.executeScript({file: "/content_scripts/select.js"}).catch(reportExecuteScriptError);

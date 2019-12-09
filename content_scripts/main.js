@@ -1,17 +1,9 @@
 (function() {
+
   if (window.hasRun) {
     return;
   }
   window.hasRun = true;
-
-  function selectMode() {
-    console.log("SELECT MODE")
-    document.addEventListener("click", e => {
-      console.log("stop this click -> ",e)
-      e.preventDefault();
-      e.stopImmediatePropagation();
-    })
-  }
 
   function downloadPopup() {
     console.log("DOWNLOAD POPUP")
@@ -22,9 +14,7 @@
   }
 
   browser.runtime.onMessage.addListener((message) => {
-    if (message.command === "select") {
-      selectMode();
-    } else if (message.command === "download"){
+     if (message.command === "download"){
       downloadPopup()
     } else if (message.command === "settings"){
       settingsNewPage()
