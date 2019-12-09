@@ -10,9 +10,8 @@ document.addEventListener("click", (e) => {
 
 
 function sendSelectCommand(tabs) {
-  browserAppData.tabs.sendMessage(tabs[0].id, {
-    command: "select",
-    });
+  browserAppData.runtime.sendMessage("select"
+    );
 }
 
 function sendDownloadCommand(tabs) {

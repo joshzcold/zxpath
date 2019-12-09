@@ -20,6 +20,8 @@
       downloadPopup()
     } else if (message.command === "settings"){
       settingsNewPage()
+    } else if (message.command === "getXpath"){
+      getXpathData(message.element)
     }
   });
   
@@ -29,6 +31,7 @@
    * Returns an array of valid Xpaths for the clickedElement
    */
   function getXpathData(clickedElement) {
+    console.log("getXpath element:  ", clickedElement)
     let dataArray = new Array();
     const acceptable = ['id', 'name', 'alt', 'value', 'title', 'src', 'background', 'cite', 'color', 'data', 'href', 'label', 'list', 'pattern', 'placeholder', 'poster'];
   

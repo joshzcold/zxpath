@@ -1,7 +1,10 @@
+
 /* globals chrome */
 var xPathFinder = xPathFinder || (() => {
   class Inspector {
+
     constructor() {
+
       this.win = window;
       this.doc = window.document;
 
@@ -18,19 +21,13 @@ var xPathFinder = xPathFinder || (() => {
       e.stopImmediatePropagation();
       e.preventDefault && e.preventDefault();
       e.stopPropagation && e.stopPropagation();
+      let myPort = browser.runtime.connect({name:"port-from-cs"});
       if (e.target.id !== this.contentNode) {
-        const XPath = this.getXPath(e.target);
-        this.XPath = XPath;
-        const contentNode = document.getElementById(this.contentNode);
-        if (contentNode) {
-          contentNode.innerText = XPath;
-        } else {
-          const contentHtml = document.createElement('div');
-          contentHtml.innerText = XPath;
-          contentHtml.id = this.contentNode;
-          document.body.appendChild(contentHtml);
-        }
-        this.options.clipboard && ( this.copyText(XPath) );
+        console.log(e)
+        myPort.postMessage({
+          command: "getXpath",
+          element: e
+          });
       }
     }
 
