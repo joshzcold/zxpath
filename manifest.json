@@ -10,7 +10,7 @@
       "all_frames": true,
       "matches": ["<all_urls>"],
       "run_at": "document_start",
-      "js": ["content_scripts/select.js", "content_scripts/main.js"]
+      "js": ["content_scripts/select.js", "content_scripts/main.js", "element-popout/element.js"]
     }
   ],
   "background": {
