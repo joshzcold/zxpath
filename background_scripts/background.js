@@ -106,9 +106,13 @@ function handleMessage(request, sender, sendResponse) {
       });
   }
 
-  browserAppData.tabs.query({ active: true, currentWindow: true })
+  if(request.command === "getXpath"){
+    browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(sendGetXPathCommand)
         .catch((e) => {console.log(e)})
+  } 
+
+  
  
   sendResponse({response: "Background sent event to main"});
 }

@@ -31,20 +31,13 @@ var xPathFinder = xPathFinder || (() => {
           console.log(`Error: ${error}`);
         }
 
-        let responsePopup = browser.runtime.sendMessage({
-          elementX: e.pageX,
-          elementY: e.pageY,
-          command: "placePopup"
-        })
-
         let response = browser.runtime.sendMessage({
-          elementX: e.pageX,
-          elementY: e.pageY,
+          X: e.x,
+          Y: e.y,
           command: "getXpath"
-        });
-
+        })
+        
         response.then(handleResponse, handleError);
-        responsePopup.then(handleResponse, handleError);
       }
     }
 
