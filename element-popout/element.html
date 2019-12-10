@@ -14,7 +14,8 @@
 </head>
 
 <body>
-    <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+    <!-- <div id="myContainer"> -->
+        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
         aria-expanded="false">
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
             focusable="false" width="1em" height="1em"
@@ -26,8 +27,10 @@
             <path d="M32.283 16.302l1.414 1.415l-15.98 15.98l-1.414-1.414z" fill="#FFFFFF" />
             <path d="M17.717 16.302l15.98 15.98l-1.414 1.415l-15.98-15.98z" fill="#FFFFFF" /></svg>
     </button>
+    <!-- </div> -->
+    
 
-    <div id="dropdown-tooltip" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <div id="dropdown-tooltip" class="dropdown-menu" data-toggle="dropdown" aria-labelledby="dropdownMenuButton">
         <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm">
         <a class="dropdown-item" href="#">Another action</a>
         <a class="dropdown-item" href="#">Something else here</a>
@@ -44,7 +47,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
     </script>
-    <script src="element.js"></script>
+    <script src="./element.js">
+        $(document).ready(function() {
+            waitForClicks();
+        })
+    </script>
 </body>
 
 </html>

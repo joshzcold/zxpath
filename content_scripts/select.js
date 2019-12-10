@@ -296,7 +296,7 @@ var xPathFinder = xPathFinder || (() => {
     if (request.command === 'select') {
       return inspect.getOptions();
     }
-    return inspect.deactivate();
+    // return inspect.deactivate();
   });
 
   return true;
