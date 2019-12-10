@@ -200,6 +200,10 @@
     });
   }
 
+  function getXpaths() {
+    return xpathObjects.map(obj => obj.topXpath);
+  }
+
   function generateWebElements(language) {
     let javaCodeArray = new Array();
 
