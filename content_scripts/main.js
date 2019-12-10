@@ -200,28 +200,30 @@
     });
   }
 
-  function generateWebElements(language, xpath) {
+  function generateWebElements(language) {
     let javaCodeArray = new Array();
-    let code = getWebElementsByLanguage(language, xpath);
-    javaCodeArray.push(code);
-    console.log(javaCodeArray);
+
+    xpathObjects.map(obj => obj.topXpath).forEach(att =>{
+      let code = getWebElements(language, att);
+      javaCodeArray.push(code);
+    });
     return javaCodeArray;
   }
 
-  function getWebElementsByLanguage(language, xpath) {
+  function getWebElements(language, xpath) {
     switch (language) {
       case "JAVA":
-        return 'driver.findElement(By.xpath("' + xpath + '"));';
+        return 'WebElement <REPLACE> = driver.findElement(By.xpath("' + xpath + '"));';
       case "C#":
-        return 'driver.findElement(By.xpath("' + xpath + '"));';
+        return 'IWebElement <REPLACE> = driver.findElement(By.xpath("' + xpath + '"));';
       case "PERL":
-        return "$driver->find_element('" + xpath + "');";
+        return "my $<REPLACE> = $driver->find_element('" + xpath + "');";
       case "PHP":
-        return "$driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
+        return "$<REPLACE> = $driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
       case "PYTHON":
-        return 'driver.find_element_by_xpath("' + xpath + '")';
+        return '<REPLACE> = driver.find_element_by_xpath("' + xpath + '")';
       case "RUBY":
-        return '@driver.find_element(:xpath,"' + xpath + '")';
+        return '<REPLACE> = @driver.find_element(:xpath,"' + xpath + '")';
     }
   }
 })();
