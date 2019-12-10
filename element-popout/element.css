@@ -6,6 +6,7 @@
     border-radius: 15px; 
     text-align: center; 
     background-color: green;
+    position: absolute;
 } 
 
 svg {
@@ -19,4 +20,9 @@ svg {
 
 #dropdown-tooltip {
     padding: 10px 10px 10px 10px;
+}
+
+#myContainer {
+    width: 500px;
+    height: 500px;
 }

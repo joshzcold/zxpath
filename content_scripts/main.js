@@ -36,19 +36,16 @@
     } else if (message.command === "settings") {
       settingsNewPage();
     } else if (message.command === "getXpath") {
-     let element = elementFromCord(message.element.X, message.element.Y)
-      console.log("this is element outside of the promise", element)
+      let element = elementFromCord(message.element.X, message.element.Y);
+      console.log("this is element outside of the promise", element);
       // place popup in dom
-      placePopup(element)
-        
+      placePopup(element, message.element.X, message.element.Y);
+
       // async call to get selector data
       var promise = new Promise(function(resolve, reject) {
-        console.log(
-            "Sending this to getXpathData " + element
-          );
         let result = getXpathData(element);
         if (result !== null) {
-          resolve( result);
+          resolve(result);
         } else {
           reject(Error(result));
         }
@@ -58,8 +55,8 @@
     }
   });
 
-  function elementFromCord(X,Y){
-    let element
+  function elementFromCord(X, Y) {
+    let element;
     if (typeof X === "number" && typeof Y === "number") {
       try {
         element = document.elementFromPoint(
@@ -71,13 +68,21 @@
         console.error(error);
       }
     }
-    return element
+    return element;
   }
 
-  function placePopup(element){
+  function placePopup(element, X, Y) {
     /**
-         * REED PLACE POPUP IN DOM HERE 
-         */
+     * REED PLACE POPUP IN DOM HERE
+     */
+    try {
+      var div = document.createElement("div");
+      div.innerHTML =
+        '<object type="text/html" data="../element-popout/element.html"></object>';
+      document.getElementById("xpath-overlay").appendChild(div);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function populatePopup(xpathDataPromise) {
@@ -86,7 +91,7 @@
       function(result) {
         console.log("result ->", result); // populate the popup
         /**
-         * REED POPULATE WITH DATA HERE 😤
+         * REED POPULATE WITH DATA HERE
          */
       },
       function(err) {
@@ -101,7 +106,6 @@
    * Returns an array of valid Xpaths for the clickedElement
    */
   function getXpathData(element) {
-
     let dataArray = new Array();
     const acceptable = [
       "id",
