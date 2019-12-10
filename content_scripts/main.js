@@ -1,4 +1,4 @@
-(function () {
+(function() {
   if (window.hasRun) {
     return;
   }
@@ -36,16 +36,13 @@
     } else if (message.command === "settings") {
       settingsNewPage();
     } else if (message.command === "getXpath") {
-      let element = elementFromCord(message.element.X, message.element.Y)
-      console.log("this is element outside of the promise", element)
+      let element = elementFromCord(message.element.X, message.element.Y);
+      console.log("this is element outside of the promise", element);
       // place popup in dom
-      placePopup(element, message.element.X, message.element.Y)
+      placePopup(element, message.element.X, message.element.Y);
 
       // async call to get selector data
-      var promise = new Promise(function (resolve, reject) {
-        console.log(
-          "Sending this to getXpathData " + element
-        );
+      var promise = new Promise(function(resolve, reject) {
         let result = getXpathData(element);
         if (result !== null) {
           resolve(result);
@@ -59,7 +56,7 @@
   });
 
   function elementFromCord(X, Y) {
-    let element
+    let element;
     if (typeof X === "number" && typeof Y === "number") {
       try {
         element = document.elementFromPoint(
@@ -71,34 +68,33 @@
         console.error(error);
       }
     }
-    return element
+    return element;
   }
 
   function placePopup(element, X, Y) {
     /**
-    * REED PLACE POPUP IN DOM HERE 
-    */
-   try {
-    var div = document.createElement("div");
-    div.innerHTML='<object type="text/html" data="../element-popout/element.html"></object>';
-    document.getElementById("xpath-overlay").appendChild(div);
-
-   } catch (error) {
-     console.error(error)
-   }
-   
+     * REED PLACE POPUP IN DOM HERE
+     */
+    try {
+      var div = document.createElement("div");
+      div.innerHTML =
+        '<object type="text/html" data="../element-popout/element.html"></object>';
+      document.getElementById("xpath-overlay").appendChild(div);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   function populatePopup(xpathDataPromise) {
     console.log("placeZXPathPopup -> xpathDataPromise", xpathDataPromise);
     xpathDataPromise.then(
-      function (result) {
+      function(result) {
         console.log("result ->", result); // populate the popup
         /**
-         * REED POPULATE WITH DATA HERE 
+         * REED POPULATE WITH DATA HERE
          */
       },
-      function (err) {
+      function(err) {
         console.log(err); // Error: "It broke"
       }
     );
@@ -110,7 +106,6 @@
    * Returns an array of valid Xpaths for the clickedElement
    */
   function getXpathData(element) {
-
     let dataArray = new Array();
     const acceptable = [
       "id",

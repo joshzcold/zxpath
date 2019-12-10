@@ -21,23 +21,40 @@ var xPathFinder = xPathFinder || (() => {
       e.stopImmediatePropagation();
       e.preventDefault && e.preventDefault();
       e.stopPropagation && e.stopPropagation();
+
+      let handleResponse = (message) => {
+        console.log(`Message from the background script:  ${message.response}`);
+      }
+
+      let handleError = (error) => {
+        console.log(`Error: ${error}`);
+      }
+
+      let sendElement = browser.runtime.sendMessage({
+        X: e.x,
+        Y: e.y,
+        command: "getXpath"
+      })
+
+      let removeElement = browser.runtime.sendMessage({
+        X: e.x,
+        Y: e.y,
+        command: "removeXpath"
+      })
+
       if (e.target.id !== this.contentNode) {
         console.log("you clicked on -> ",e)
-        let handleResponse = (message) => {
-          console.log(`Message from the background script:  ${message.response}`);
-        }
-
-        let handleError = (error) => {
-          console.log(`Error: ${error}`);
-        }
-
-        let response = browser.runtime.sendMessage({
-          X: e.x,
-          Y: e.y,
-          command: "getXpath"
-        })
-        
-        response.then(handleResponse, handleError);
+        if(e.target.getAttribute("zxpath") === "true"){
+          e.target.style.border = "none"
+          e.target.setAttribute("zxpath", "false")
+          // remove element from global
+          removeElement.then(handleResponse, handleError)
+        } else {
+          e.target.style.border = "3px dashed red"
+          e.target.setAttribute("zxpath", "true")
+         // Add element to global
+          sendElement.then(handleResponse, handleError);
+        } 
       }
     }
 
