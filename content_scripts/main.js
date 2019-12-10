@@ -63,34 +63,6 @@
     return validateXpathData(dataArray, element.nodeName);
   }
   
-  /**
-   * @param {*} dataArray 
-   * @param {*} elementType 
-   * 
-   * Called by getByData() in order to validate xpaths.
-   */
-  function validateXpathData(dataArray, elementType) {
-      dataArray.forEach(att =>{
-          let xpath = "//" + elementType + "[@" + att.attribute + " = \'" + att.value + "\']";
-          
-          let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
-  
-          if(results.snapshotLength === 1) {
-              xpathArray.push(xpath);
-          }
-      });
-      console.log("validateXpathData -> xpathArray: ", xpathArray)
-      return xpathArray;
-  }
-
-  acceptable.forEach(att => {
-      if (clickedElement.hasAttribute(att)) {
-          dataArray.push({ attribute: att, value: clickedElement.getAttribute(att) });
-      }
-  });
-  return validateXpathData(dataArray, clickedElement.nodeName);
-}
-
 /**
 * @param {*} dataArray 
 * @param {*} elementType 
