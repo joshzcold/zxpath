@@ -21,9 +21,8 @@ var xPathFinder = xPathFinder || (() => {
       e.stopImmediatePropagation();
       e.preventDefault && e.preventDefault();
       e.stopPropagation && e.stopPropagation();
-      let myPort = browser.runtime.connect({name:"port-from-cs"});
       if (e.target.id !== this.contentNode) {
-        // console.log(e)
+        console.log("you clicked on -> ",e)
         let handleResponse = (message) => {
           console.log(`Message from the background script:  ${message.response}`);
         }
@@ -32,14 +31,20 @@ var xPathFinder = xPathFinder || (() => {
           console.log(`Error: ${error}`);
         }
 
-        let response = browser.runtime.sendMessage(e);
+        let responsePopup = browser.runtime.sendMessage({
+          elementX: e.pageX,
+          elementY: e.pageY,
+          command: "placePopup"
+        })
+
+        let response = browser.runtime.sendMessage({
+          elementX: e.pageX,
+          elementY: e.pageY,
+          command: "getXpath"
+        });
 
         response.then(handleResponse, handleError);
-
-        // myPort.postMessage({
-        //   command: "getXpath",
-        //   element: e
-        //   });
+        responsePopup.then(handleResponse, handleError);
       }
     }
 

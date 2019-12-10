@@ -38,8 +38,8 @@
     } else if (message.command === "settings"){
       settingsNewPage()
     } else if (message.command === "getXpath"){
-      console.log(message);
-      getXpathData(message.element)
+      console.log("Sending this to getXpathData" + "X: " +message.elementX + "Y:" + message.elementY );
+      getXpathData(message.elementX, message.elementY)
     }
   });
   
@@ -48,18 +48,19 @@
    * 
    * Returns an array of valid Xpaths for the clickedElement
    */
-  function getXpathData(clickedElement) {
-    console.log("getXpath element:  ", clickedElement)
+  function getXpathData(elementX, elementY) {
+    let element = document.elementFromPoint(elementX, elementY)
+    console.log("getXpath element:  ", element)
     let dataArray = new Array();
     const acceptable = ['id', 'name', 'alt', 'value', 'title', 'src', 'background', 'cite', 'color', 'data', 'href', 'label', 'list', 'pattern', 'placeholder', 'poster'];
   
     acceptable.forEach(att => {
-      if(clickedElement.hasAttribute(att)) {
-          dataArray.push({attribute : att, value : clickedElement.getAttribute(att)});
+      if(element.hasAttribute(att)) {
+          dataArray.push({attribute : att, value : element.getAttribute(att)});
        }
     });
     
-    return validateXpathData(dataArray, clickedElement.nodeName);
+    return validateXpathData(dataArray, element.nodeName);
   }
   
   /**
@@ -78,7 +79,7 @@
               xpathArray.push(xpath);
           }
       });
-      
+      console.log("validateXpathData -> xpathArray: ", xpathArray)
       return xpathArray;
   }
 
