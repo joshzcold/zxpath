@@ -85,13 +85,32 @@ const browserAppData = this.browser || this.chrome;
   * This is for messages sent through 'chrome.runtime.sendMessage'.
   * We could use port for that but this is here as an example of one-time messages.
   */
- browserAppData.runtime.onMessage.addListener(function(request, sender) {
-   console.log("background-script runtime.onMessage", request, sender);
+//  browserAppData.runtime.onMessage.addListener(function(request, sender) {
+//    console.log("background-script runtime.onMessage", request, sender);
  
-   // Messages from content scripts should have sender.tab set.
-   // The are all relayed to the "panel" connection.
-   if (request.target == "content" && request.tabId) {
-     chrome.tabs.sendMessage(request.tabId, request);
-   }
+//    // Messages from content scripts should have sender.tab set.
+//    // The are all relayed to the "panel" connection.
+//    if (request.target == "content" && request.tabId) {
+//      chrome.tabs.sendMessage(request.tabId, request);
+//    }
  
- });
+//  });
+
+function handleMessage(request, sender, sendResponse) {
+  console.log("Message from the content script: " + request);
+  
+  let sendGetXPathCommand = (tabs) => {
+     browserAppData.tabs.sendMessage(tabs[0].id, {
+        command: "getXpath",
+        element: request
+      });
+  }
+
+  browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(sendGetXPathCommand)
+        .catch((e) => {console.log(e)})
+ 
+  sendResponse({response: "Background sent event to main"});
+}
+
+browser.runtime.onMessage.addListener(handleMessage);

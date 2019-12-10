@@ -7,8 +7,24 @@
   
   let xpathArray = new Array();
 
+  function handleResponse(message) {
+    console.log(`Message from the background script:  ${message.response}`);
+  }
+
+  function handleError(error) {
+    console.log(`Error: ${error}`);
+  }
+
+  function notifyBackgroundPage() {
+    var sending = browser.runtime.sendMessage({
+      greeting: "Greeting from the content script"
+    });
+    sending.then(handleResponse, handleError);
+  }
+
   function downloadPopup() {
-    console.log("DOWNLOAD POPUP")
+    console.log("DOWNLOAD POPUP");
+    notifyBackgroundPage();
   }
 
   function settingsNewPage() {
@@ -16,11 +32,13 @@
   }
 
   browser.runtime.onMessage.addListener((message) => {
+    console.log("Message received in main: ", message);
      if (message.command === "download"){
       downloadPopup()
     } else if (message.command === "settings"){
       settingsNewPage()
     } else if (message.command === "getXpath"){
+      console.log(message);
       getXpathData(message.element)
     }
   });
