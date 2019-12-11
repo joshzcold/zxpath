@@ -9,6 +9,10 @@
     position: absolute;
 } 
 
+body {
+    background-color: transparent;
+}
+
 svg {
     margin: -1px 0px 0px -1px;
     display: block;
@@ -21,8 +25,8 @@ svg {
 #dropdown-tooltip {
     padding: 10px 10px 10px 10px;
 }
-
+/* 
 #myContainer {
     width: 500px;
     height: 500px;
-}
+} */
