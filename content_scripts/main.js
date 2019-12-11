@@ -94,6 +94,7 @@
     iframe.setAttribute("allowtransparency", "true")
     iframe.setAttribute("frameBorder", "0")
     iframe.setAttribute("scrolling", "no")
+    iframe.setAttribute("id", "zxpath-iframe")
 
 
     var div = document.createElement("div");
