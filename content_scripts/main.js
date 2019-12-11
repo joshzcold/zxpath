@@ -163,13 +163,12 @@
 
     let obj;
     if (xpathArray.length === 0) {
-      obj = { topXpath: "NO VALID XPATH", xpathList: xpathArray };
+      obj = {topXpath: "NO VALID XPATH", xpathList: xpathArray, elementType: elementType};
     } else {
-      obj = { topXpath: xpathArray[0], xpathList: xpathArray };
+      obj = {topXpath: xpathArray[0], xpathList: xpathArray, elementType: elementType};
     }
 
     xpathObjects.push(obj);
-    console.log("validateXpathData -> xpathObjects: ", xpathObjects);
     return obj;
   }
 
@@ -217,17 +216,17 @@
   function getWebElements(language, xpath) {
     switch (language) {
       case "JAVA":
-        return 'WebElement <REPLACE> = driver.findElement(By.xpath("' + xpath + '"));';
+        return 'WebElement <REPLACE_NAME> = driver.findElement(By.xpath("' + xpath + '"));';
       case "C#":
-        return 'IWebElement <REPLACE> = driver.findElement(By.xpath("' + xpath + '"));';
+        return 'IWebElement <REPLACE_NAME>> = driver.findElement(By.xpath("' + xpath + '"));';
       case "PERL":
-        return "my $<REPLACE> = $driver->find_element('" + xpath + "');";
+        return "my $<REPLACE_NAME>> = $driver->find_element('" + xpath + "');";
       case "PHP":
-        return "$<REPLACE> = $driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
+        return "$<REPLACE_NAME>> = $driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
       case "PYTHON":
-        return '<REPLACE> = driver.find_element_by_xpath("' + xpath + '")';
+        return '<REPLACE_NAME>> = driver.find_element_by_xpath("' + xpath + '")';
       case "RUBY":
-        return '<REPLACE> = @driver.find_element(:xpath,"' + xpath + '")';
+        return '<REPLACE_NAME>> = @driver.find_element(:xpath,"' + xpath + '")';
     }
   }
 })();
