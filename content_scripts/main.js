@@ -72,26 +72,22 @@
   }
 
   function placePopup(element, X, Y) {
-    /**
-    * REED PLACE POPUP IN DOM HERE 
-    */
-   try {
-    var div = document.createElement("div");
-    div.innerHTML='<object type="text/html" data="../element-popout/element.html"></object>';
-    div.style.position = "absolute";
-    div.style.left = X.left;
-    console.log(X + X.left + X.top);
-    console.log(div);
-    div.style.top = Y.top;
-    div.style.width = "100px";
-    div.style.height = "100px";
-    div.style.zIndex = "60000000"
-    document.getElementById("xpath-overlay").appendChild(div);
+    let newX = X + window.pageXOffset;
+    let newY = Y + window.pageYOffset;
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:none transparent; width:auto;";
 
-   } catch (error) {
-     console.error(error)
-   }
-   
+    let url = browser.runtime.getURL("element-popout/element.html");
+    let iframe = document.createElement("iframe");
+    iframe.setAttribute("src", url);
+    iframe.setAttribute("style", style);
+    iframe.setAttribute("allowtransparency", "true")
+    iframe.setAttribute("frameBorder", "0")
+    iframe.setAttribute("scrolling", "no")
+
+
+    var div = document.createElement("div");
+    
+    document.getElementById("insertPopup").appendChild(iframe);
   }
 
   function populatePopup(xpathDataPromise) {
