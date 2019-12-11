@@ -17,15 +17,71 @@ var xPathFinder =
         this.overlaySelection = "xpath-selections"
       }
 
-      getData(e) {
-
+      getData(e){
         // TODO handle absolute positioning with scroll offset 
         e.stopImmediatePropagation();
         e.preventDefault && e.preventDefault();
         e.stopPropagation && e.stopPropagation();
+        let handleResponse = message => {
+          console.log(
+            `Message from the background script:  ${message.response}`
+          );
+        };
 
+        let handleError = error => {
+          console.log(`Error: ${error}`);
+        };
+
+        let sendElement = browser.runtime.sendMessage({
+          X: e.x,
+          Y: e.y,
+          command: "getXpath"
+        });
+
+        let removeElement = browser.runtime.sendMessage({
+          X: e.x,
+          Y: e.y,
+          command: "removeXpath"
+        });
+
+        if (e.target.id !== this.contentNode) {
+          console.log("you clicked on -> ", e);
+          if (e.target.getAttribute("zxpath") === "true") {
+            e.target.setAttribute("zxpath", "false");
+            // remove element from global
+            removeElement.then(handleResponse, handleError);
+            this.removeSelection(e)
+          } else {
+            e.target.setAttribute("zxpath", "true");
+            // Add element to global
+            sendElement.then(handleResponse, handleError);
+            this.setSelection(e)
+          }
+        }
+      }
+
+      removeSelection(e){
+        let xCord = e.x
+        let yCord = e.y
+
+        let element
+        if (typeof xCord === "number" && typeof yCord === "number") {
+        try {
+        element = document.elementFromPoint(
+          xCord - window.pageXOffset,
+          yCord - window.pageYOffset
+        );
+        console.log("remove from xpath selections:  ", element);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    return element;
+      }
+
+      setSelection(e){
         const node = e.target;
-        if (node.id !== this.contentNode) {
+        if (node.id !== this.selectionNode && node.id !== this.contentNode) {
           const box = this.getNestedBoundingClientRect(node, this.win);
           const dimensions = this.getElementDimensions(node);
 
@@ -80,41 +136,6 @@ var xPathFinder =
           selectionNode.appendChild(selectionBorder);
           selectionBorder.appendChild(selectionPadding);
           selectionPadding.appendChild(selectionContent);
-        }
-
-        let handleResponse = message => {
-          console.log(
-            `Message from the background script:  ${message.response}`
-          );
-        };
-
-        let handleError = error => {
-          console.log(`Error: ${error}`);
-        };
-
-        let sendElement = browser.runtime.sendMessage({
-          X: e.x,
-          Y: e.y,
-          command: "getXpath"
-        });
-
-        let removeElement = browser.runtime.sendMessage({
-          X: e.x,
-          Y: e.y,
-          command: "removeXpath"
-        });
-
-        if (e.target.id !== this.contentNode) {
-          console.log("you clicked on -> ", e);
-          if (e.target.getAttribute("zxpath") === "true") {
-            e.target.setAttribute("zxpath", "false");
-            // remove element from global
-            removeElement.then(handleResponse, handleError);
-          } else {
-            e.target.setAttribute("zxpath", "true");
-            // Add element to global
-            sendElement.then(handleResponse, handleError);
-          }
         }
       }
 
@@ -208,7 +229,7 @@ var xPathFinder =
 
       draw(e) {
         const node = e.target;
-        if (node.id !== this.contentNode) {
+        if (node.id !== this.selectionNode && node.id !== this.contentNode) {
           this.removeOverlay();
 
           const box = this.getNestedBoundingClientRect(node, this.win);

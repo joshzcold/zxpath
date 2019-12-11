@@ -73,16 +73,25 @@
 
   function placePopup(element, X, Y) {
     /**
-     * REED PLACE POPUP IN DOM HERE
-     */
-    try {
-      var div = document.createElement("div");
-      div.innerHTML =
-        '<object type="text/html" data="../element-popout/element.html"></object>';
-      document.getElementById("xpath-overlay").appendChild(div);
-    } catch (error) {
-      console.error(error);
-    }
+    * REED PLACE POPUP IN DOM HERE 
+    */
+   try {
+    var div = document.createElement("div");
+    div.innerHTML='<object type="text/html" data="../element-popout/element.html"></object>';
+    div.style.position = "absolute";
+    div.style.left = X.left;
+    console.log(X + X.left + X.top);
+    console.log(div);
+    div.style.top = Y.top;
+    div.style.width = "100px";
+    div.style.height = "100px";
+    div.style.zIndex = "60000000"
+    document.getElementById("xpath-overlay").appendChild(div);
+
+   } catch (error) {
+     console.error(error)
+   }
+   
   }
 
   function populatePopup(xpathDataPromise) {
