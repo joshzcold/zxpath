@@ -17,6 +17,11 @@ html, body {
 
 .button{
   display: block;
+  cursor: pointer;
+}
+
+.button:focus{
+  outline: none;
 }
 
 .button img{
