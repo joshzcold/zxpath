@@ -83,26 +83,22 @@
   }
 
   function placePopup(element, X, Y) {
-    /**
-    * REED PLACE POPUP IN DOM HERE 
-    */
-   try {
-    var div = document.createElement("div");
-    div.innerHTML='<object type="text/html" data="../element-popout/element.html"></object>';
-    div.style.position = "absolute";
-    div.style.left = X.left;
-    console.log(X + X.left + X.top);
-    console.log(div);
-    div.style.top = Y.top;
-    div.style.width = "100px";
-    div.style.height = "100px";
-    div.style.zIndex = "60000000"
-    document.getElementById("xpath-selections").appendChild(div);
+    let newX = X + window.pageXOffset;
+    let newY = Y + window.pageYOffset;
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:none transparent; width:auto;";
 
-   } catch (error) {
-     console.error(error)
-   }
-   
+    let url = browser.runtime.getURL("element-popout/element.html");
+    let iframe = document.createElement("iframe");
+    iframe.setAttribute("src", url);
+    iframe.setAttribute("style", style);
+    iframe.setAttribute("allowtransparency", "true")
+    iframe.setAttribute("frameBorder", "0")
+    iframe.setAttribute("scrolling", "no")
+
+
+    var div = document.createElement("div");
+    
+    document.getElementById("insertPopup").appendChild(iframe);
   }
 
   function populatePopup(xpathDataPromise) {
@@ -183,13 +179,12 @@
 
     let obj;
     if (xpathArray.length === 0) {
-      obj = { topXpath: "NO VALID XPATH", xpathList: xpathArray };
+      obj = {topXpath: "NO VALID XPATH", xpathList: xpathArray, elementType: elementType};
     } else {
-      obj = { topXpath: xpathArray[0], xpathList: xpathArray };
+      obj = {topXpath: xpathArray[0], xpathList: xpathArray, elementType: elementType};
     }
 
     xpathObjects.push(obj);
-    console.log("validateXpathData -> xpathObjects: ", xpathObjects);
     return obj;
   }
 
@@ -237,17 +232,17 @@
   function getWebElements(language, xpath) {
     switch (language) {
       case "JAVA":
-        return 'WebElement <REPLACE> = driver.findElement(By.xpath("' + xpath + '"));';
+        return 'WebElement <REPLACE_NAME> = driver.findElement(By.xpath("' + xpath + '"));';
       case "C#":
-        return 'IWebElement <REPLACE> = driver.findElement(By.xpath("' + xpath + '"));';
+        return 'IWebElement <REPLACE_NAME>> = driver.findElement(By.xpath("' + xpath + '"));';
       case "PERL":
-        return "my $<REPLACE> = $driver->find_element('" + xpath + "');";
+        return "my $<REPLACE_NAME>> = $driver->find_element('" + xpath + "');";
       case "PHP":
-        return "$<REPLACE> = $driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
+        return "$<REPLACE_NAME>> = $driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
       case "PYTHON":
-        return '<REPLACE> = driver.find_element_by_xpath("' + xpath + '")';
+        return '<REPLACE_NAME>> = driver.find_element_by_xpath("' + xpath + '")';
       case "RUBY":
-        return '<REPLACE> = @driver.find_element(:xpath,"' + xpath + '")';
+        return '<REPLACE_NAME>> = @driver.find_element(:xpath,"' + xpath + '")';
     }
   }
 })();

@@ -181,7 +181,7 @@ var xPathFinder =
           border: "rgba(255, 200, 50, 0.3)"
         };
 
-        
+        this.popups = this.doc.createElement("div");
         this.container = this.doc.createElement("div");
         this.selection = this.doc.createElement("div");
         this.node = this.doc.createElement("div");
@@ -201,6 +201,7 @@ var xPathFinder =
 
         this.selection.id = this.overlaySelection;
         this.container.id = this.overlayElement;
+        this.popups.id = "insertPopup";
         this.selection.style.zIndex = 10000001;
         this.container.style.zIndex = 10000000;
         this.node.style.zIndex = 10000000;
@@ -210,8 +211,9 @@ var xPathFinder =
         this.node.appendChild(this.border);
         this.border.appendChild(this.padding);
         this.padding.appendChild(this.content);
-        this.doc.body.appendChild(this.selection)
-        this.doc.body.appendChild(this.container)
+        this.doc.body.appendChild(this.selection);
+        this.doc.body.appendChild(this.container);
+        this.doc.body.appendChild(this.popups);
       }
 
       removeOverlay() {
