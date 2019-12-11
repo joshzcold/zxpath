@@ -59,6 +59,4 @@ document.addEventListener("click", (e) => {
     // TODO: fix this response component
     // response.then()
 });
-
-console.log("HELLOW WORLD FROM elemnt.js")
 })();
