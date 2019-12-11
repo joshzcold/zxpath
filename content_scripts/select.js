@@ -181,6 +181,7 @@ var xPathFinder =
           border: "rgba(255, 200, 50, 0.3)"
         };
 
+        
         this.container = this.doc.createElement("div");
         this.selection = this.doc.createElement("div");
         this.node = this.doc.createElement("div");

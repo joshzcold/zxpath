@@ -23,6 +23,16 @@
 
   function downloadPopup() {
     console.log("DOWNLOAD POPUP");
+
+
+    // let url = browser.runtime.getURL("popup/output-popup.html")
+    // console.log(url)
+
+    // let iframe = document.createElement("iframe")
+    // iframe.setAttribute("src", url)
+    // iframe.setAttribute("id", ".download_modal")
+    // document.body.appendChild(iframe)
+
     notifyBackgroundPage();
   }
 
@@ -38,6 +48,7 @@
     } else if (message.command === "getXpath") {
       let element = elementFromCord(message.element.X, message.element.Y);
       console.log("this is element outside of the promise", element);
+
       // place popup in dom
       placePopup(element, message.element.X, message.element.Y);
 
@@ -86,7 +97,7 @@
     div.style.width = "100px";
     div.style.height = "100px";
     div.style.zIndex = "60000000"
-    document.getElementById("xpath-overlay").appendChild(div);
+    document.getElementById("xpath-selections").appendChild(div);
 
    } catch (error) {
      console.error(error)
