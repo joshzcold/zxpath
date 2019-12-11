@@ -19,6 +19,9 @@ function listenForClicks() {
       browserAppData.tabs.sendMessage(tabs[0].id, {
         command: "download",
       });
+      let div = document.createElement("div")
+      div.innerHTML='<p>fdhjsaklfhdklsa</p>'
+      document.body.appendChild(div)
     }
 
     function sendSettingsCommand(tabs) {
