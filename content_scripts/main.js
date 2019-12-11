@@ -1,4 +1,4 @@
-(function () {
+(function() {
   if (window.hasRun) {
     return;
   }
@@ -36,16 +36,13 @@
     } else if (message.command === "settings") {
       settingsNewPage();
     } else if (message.command === "getXpath") {
-      let element = elementFromCord(message.element.X, message.element.Y)
-      console.log("this is element outside of the promise", element)
+      let element = elementFromCord(message.element.X, message.element.Y);
+      console.log("this is element outside of the promise", element);
       // place popup in dom
-      placePopup(element, message.element.X, message.element.Y)
+      placePopup(element, message.element.X, message.element.Y);
 
       // async call to get selector data
-      var promise = new Promise(function (resolve, reject) {
-        console.log(
-          "Sending this to getXpathData " + element
-        );
+      var promise = new Promise(function(resolve, reject) {
         let result = getXpathData(element);
         if (result !== null) {
           resolve(result);
@@ -61,7 +58,7 @@
   });
 
   function elementFromCord(X, Y) {
-    let element
+    let element;
     if (typeof X === "number" && typeof Y === "number") {
       try {
         element = document.elementFromPoint(
@@ -73,42 +70,38 @@
         console.error(error);
       }
     }
-    return element
+    return element;
   }
 
   function placePopup(element, X, Y) {
-    /**
-    * REED PLACE POPUP IN DOM HERE 
-    */
-   try {
-    var div = document.createElement("div");
-    div.innerHTML='<object type="text/html" data="../element-popout/element.html"></object>';
-    div.style.position = "absolute";
-    div.style.left = X.left;
-    console.log(X + X.left + X.top);
-    console.log(div);
-    div.style.top = Y.top;
-    div.style.width = "100px";
-    div.style.height = "100px";
-    div.style.zIndex = "60000000"
-    document.getElementById("xpath-overlay").appendChild(div);
+    let newX = X + window.pageXOffset;
+    let newY = Y + window.pageYOffset;
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:none transparent; width:auto;";
 
-   } catch (error) {
-     console.error(error)
-   }
-   
+    let url = browser.runtime.getURL("element-popout/element.html");
+    let iframe = document.createElement("iframe");
+    iframe.setAttribute("src", url);
+    iframe.setAttribute("style", style);
+    iframe.setAttribute("allowtransparency", "true")
+    iframe.setAttribute("frameBorder", "0")
+    iframe.setAttribute("scrolling", "no")
+
+
+    var div = document.createElement("div");
+    
+    document.getElementById("insertPopup").appendChild(iframe);
   }
 
   function populatePopup(xpathDataPromise) {
     console.log("placeZXPathPopup -> xpathDataPromise", xpathDataPromise);
     xpathDataPromise.then(
-      function (result) {
+      function(result) {
         console.log("result ->", result); // populate the popup
         /**
-         * REED POPULATE WITH DATA HERE 
+         * REED POPULATE WITH DATA HERE
          */
       },
-      function (err) {
+      function(err) {
         console.log(err); // Error: "It broke"
       }
     );
@@ -120,7 +113,6 @@
    * Returns an array of valid Xpaths for the clickedElement
    */
   function getXpathData(element) {
-
     let dataArray = new Array();
     const acceptable = [
       "id",
@@ -178,13 +170,12 @@
 
     let obj;
     if (xpathArray.length === 0) {
-      obj = { topXpath: "NO VALID XPATH", xpathList: xpathArray };
+      obj = {topXpath: "NO VALID XPATH", xpathList: xpathArray, elementType: elementType};
     } else {
-      obj = { topXpath: xpathArray[0], xpathList: xpathArray };
+      obj = {topXpath: xpathArray[0], xpathList: xpathArray, elementType: elementType};
     }
 
     xpathObjects.push(obj);
-    console.log("validateXpathData -> xpathObjects: ", xpathObjects);
     return obj;
   }
 
@@ -215,28 +206,34 @@
     });
   }
 
-  function generateWebElements(language, xpath) {
+  function getXpaths() {
+    return xpathObjects.map(obj => obj.topXpath);
+  }
+
+  function generateWebElements(language) {
     let javaCodeArray = new Array();
-    let code = getWebElementsByLanguage(language, xpath);
-    javaCodeArray.push(code);
-    console.log(javaCodeArray);
+
+    xpathObjects.map(obj => obj.topXpath).forEach(att =>{
+      let code = getWebElements(language, att);
+      javaCodeArray.push(code);
+    });
     return javaCodeArray;
   }
 
-  function getWebElementsByLanguage(language, xpath) {
+  function getWebElements(language, xpath) {
     switch (language) {
       case "JAVA":
-        return 'driver.findElement(By.xpath("' + xpath + '"));';
+        return 'WebElement <REPLACE_NAME> = driver.findElement(By.xpath("' + xpath + '"));';
       case "C#":
-        return 'driver.findElement(By.xpath("' + xpath + '"));';
+        return 'IWebElement <REPLACE_NAME>> = driver.findElement(By.xpath("' + xpath + '"));';
       case "PERL":
-        return "$driver->find_element('" + xpath + "');";
+        return "my $<REPLACE_NAME>> = $driver->find_element('" + xpath + "');";
       case "PHP":
-        return "$driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
+        return "$<REPLACE_NAME>> = $driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
       case "PYTHON":
-        return 'driver.find_element_by_xpath("' + xpath + '")';
+        return '<REPLACE_NAME>> = driver.find_element_by_xpath("' + xpath + '")';
       case "RUBY":
-        return '@driver.find_element(:xpath,"' + xpath + '")';
+        return '<REPLACE_NAME>> = @driver.find_element(:xpath,"' + xpath + '")';
     }
   }
 })();
