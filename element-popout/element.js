@@ -16,9 +16,17 @@
 // document.getElementById('dropdownMenuButton').addEventListener('focus', customDropdownShow);
 // document.getElementById('dropdownMenuButton').addEventListener('blur', customDropdownHide);
 
-// document.getElementById('dropdownMenuButton').onclick = function (e) {
-//     e.stopPropagation();
-// }
+document.getElementById('dropdownMenuButton').onclick = function (e) {
+    document.getElementById('dropdown-tooltip').style.visibility = "visible";
+}
+
+document.onclick = function (e) {
+    var tooltip = document.getElementById('dropdown-tooltip');
+    if (!(e.target.id == "dropdownMenuButton" || e.target.id == "dropdown-tooltip"))
+        document.getElementById('dropdown-tooltip').style.visibility = "hidden";
+    if (!document.getElementById('dropdown-tooltip').contains(e.target))
+        document.getElementById('dropdown-tooltip').style.visibility = "hidden";
+}
 
 // function customDropdownShow() {
 //     var dropbutton = document.getElementById('dropdownMenuButton');
@@ -39,3 +47,4 @@
 //     document.body.classList.remove("show");
 //     // dropmenu.style.display = "hidden";
 // }
+
