@@ -1,18 +1,38 @@
 html, body {
-  flex: auto;
+  /* flex: auto; */
+  width: 265px;
+  overflow: hidden;
+}
+
+#popup-buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 1em;
 }
 
 .hidden {
   display: none;
 }
 
-.button {
-  margin: 3% auto;
-  padding: 4px;
-  cursor: pointer;
+.button{
+  display: block;
+}
+
+.button img{
   width: 30px;
 }
 
 .button:hover {
   background-color: lightgray;
+}
+
+.modal-section {
+  margin-bottom:30px;
+}
+
+.button-group {
+  display:flex;
+  justify-content: space-around;
+  align-items: center;
 }

@@ -15,23 +15,6 @@ function listenForClicks() {
       });
     }
 
-    function sendDownloadCommand(tabs) {
-      browserAppData.tabs.sendMessage(tabs[0].id, {
-        command: "download",
-      });
-      let div = document.createElement("div")
-      div.innerHTML='<p>fdhjsaklfhdklsa</p>'
-      document.body.appendChild(div)
-    }
-
-    function sendSettingsCommand(tabs) {
-      browserAppData.tabs.sendMessage(tabs[0].id, {
-        command: "settings",
-      });
-    }
-
-
-
     function reportError(error) {
       console.error(`Could not beastify: ${error}`);
     }
@@ -44,15 +27,7 @@ function listenForClicks() {
       browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(sendSelectCommand)
         .catch(reportError);
-    } else if (e.target.classList.contains("download")) {
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(sendDownloadCommand)
-        .catch(reportError);
-    } else if (e.target.classList.contains("settings")) {
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(sendSettingsCommand)
-        .catch(reportError);
-    }
+    } 
   });
 }
 
