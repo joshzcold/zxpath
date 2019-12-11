@@ -1,3 +1,4 @@
+(function () {
 // document.onclick = function() {
 //     var x = document.getElementById('dropdownMenuButton');
 //     if (x.style.visibility == "visible") 
@@ -48,3 +49,16 @@ document.onclick = function (e) {
 //     // dropmenu.style.display = "hidden";
 // }
 
+document.addEventListener("click", (e) => {
+    console.log("HELLOW WORLD FROMelemnt.js")
+    let reponse = browser.runtime.sendMessage({
+        content: "message originating from element.js",
+        command: "elementCommand"
+    })
+
+    // TODO: fix this response component
+    // response.then()
+});
+
+console.log("HELLOW WORLD FROM elemnt.js")
+})();

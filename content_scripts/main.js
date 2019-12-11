@@ -55,6 +55,8 @@
       });
       // populate the popup with data
       populatePopup(promise);
+    } else if (message.command === "elementCommand") {
+        console.log(message.content)
     }
   });
 
