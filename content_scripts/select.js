@@ -72,8 +72,8 @@ var xPathFinder =
           });
 
           Object.assign(selectionNode.style, {
-            top: box.top - dimensions.marginTop + "px",
-            left: box.left - dimensions.marginLeft + "px"
+            top: box.top - dimensions.marginTop + window.pageYOffset + "px",
+            left: box.left - dimensions.marginLeft + window.pageXOffset + "px"
           });
 
           this.selection.appendChild(selectionNode);
