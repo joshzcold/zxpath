@@ -275,7 +275,7 @@
 
   /****** Language Output ******/
 
-  function generateWebElements(language, xpath) {
+  function generateWebElements(language) {
     let javaCodeArray = new Array();
 
     xpathObjects.forEach(obj => {
@@ -302,8 +302,34 @@
     }
   }
 
-  function getJavaPOM(name) {
+  function getJavaPOM() {
+    let pom = "private class ClassName {\n\n" +
 
+    "  /* Element Variables */ \n";
+    generateWebElements("JAVA").forEach(element => {
+      pom += "  " + element + "\n";
+    });
+
+    pom += "\n  /* Function Calls */ \n";
+
+    xpathObjects.forEach(obj => {
+      if(obj.elementType === "button" || obj.elementType === "a") {
+        pom+= "  private void click" + obj.name + "Button() {\n" +
+        "  " + obj.name + ".click();\n" +
+        "  }\n\n"
+      }
+
+      else if(obj.elementType === "input") {
+        pom+= "  private void set" + obj.name + "Field(String value) {\n" +
+        "  " + obj.name + ".clear();\n" +
+        "  " + obj.name + ".sendKeys(value);\n" +
+        "  }\n\n"
+      }
+    });
+
+    pom += "}";
+
+    return pom
   }
 
   /***** Utility Functions ******/
