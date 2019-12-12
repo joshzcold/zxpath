@@ -66,7 +66,7 @@
     let language = downloadOptions.language
     console.log(downloadOptions)
     if(resultOption === "XPATH"){
-
+      fileFormatter = getXpaths()
     } else if (resultOption === "VAR"){
       console.log("hellow orld")
       fileFormatter =  xpathObjects.reduce(getReducedString, "");
@@ -96,7 +96,7 @@
     let language = downloadOptions.language
     console.log(downloadOptions)
     if(resultOption === "XPATH"){
-
+      fileFormatter = getXpaths()
     } else if (resultOption === "VAR"){
       fileFormatter =  xpathObjects.reduce(getReducedString, "");
     } else if (resultOption === "POM"){
@@ -313,7 +313,8 @@
   /****** Language Output ******/
 
   function getXpaths() {
-    return xpathObjects.map(obj => obj.topXpath);
+    let values = xpathObjects.map(obj => obj.topXpath);
+    return values.join('\n')
   }
 
   function generateWebElements(language) {
