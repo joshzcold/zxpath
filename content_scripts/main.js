@@ -157,15 +157,9 @@
     if(e.target.id === "zxpath-popup-selection"){
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
-
       console.log("tis is the xpath im going to replace -> ",e.target.innerText)
-
-      let response = browser.runtime.sendMessage({
-        command: "elementCommand",
-        selectedXpath: e.target.textContent
-    });
-
-    response.then(handleResponse, handleError);
+      swapPrimaryXpath(parseInt(zxpathID),e.target.innerText)
+      console.log("xpathObjects after change -> ",xpathObjects)
     }
    })
 
@@ -173,9 +167,9 @@
     if(e.target.id === "zxpath-popup-input"){
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
-
       let inputName = e.target.value;
-      console.log("This is new xpath name value -> ", inputName);
+      setName(parseInt(zxpathID), inputName)
+      console.log("xpathObjects after change -> ",xpathObjects)
     }
   })
 
@@ -317,7 +311,7 @@
   function setName(id, newName) {
     xpathObjects = xpathObjects.map(obj => {
       if (obj.id === id) {
-        return { ...obj, name: name };
+        return { ...obj, name: newName };
       }
       else {
         return obj
