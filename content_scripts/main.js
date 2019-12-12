@@ -127,7 +127,7 @@
   function placePopup(element, X, Y, id) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:#F1C399; width:auto; x-index: 100;";
 
     // let url = browser.runtime.getURL("element-popout/element.html");
     // let iframe = document.createElement("iframe");
@@ -143,7 +143,7 @@
     "<p>Select Preffered Xpath</p>" + 
     "<ol>";
 
-    getXpaths().forEach(xpath => {
+    getXpathList(id).forEach(xpath => {
       html += "<li>" + xpath + "</li>";
     });
     
@@ -221,13 +221,7 @@
       let xpath =
         "//" + elementType + "[@" + att.attribute + " = '" + att.value + "']";
 
-      let results = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-        null
-      );
+      let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
       if (results.snapshotLength === 1) {
         xpathArray.push(xpath);
@@ -248,7 +242,7 @@
       obj = {
         id: id,
         name: "Enter_Name",
-        ttopXpath: xpathArray[0],
+        topXpath: xpathArray[0],
         xpathList: xpathArray,
         elementType: elementType
       };
@@ -322,5 +316,11 @@
     xpathObjects = xpathObjects.filter(obj => {
       return obj.id !== id;
     });
+  }
+
+  function getXpathList(id) {  
+    console.log(xpathObjects);
+    console.log(id);
+    return xpathObjects.find(obj => obj.id === id).xpathList;
   }
 })();
