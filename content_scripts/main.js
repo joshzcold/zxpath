@@ -34,8 +34,18 @@
 
   function getReducedString(acc, xpath) {
     console.log("Getting the xpaths passed to reduce");
+    let result
     let language = downloadOptions.language
-    return acc + getWebElements(language, xpath.topXpath, xpath.name) + " \n";
+    let resultOption = downloadOptions.result
+
+    if(resultOption === "XPATH"){
+
+    } else if (resultOption === "VAR"){
+      result = acc + getWebElements(language, xpath.topXpath, xpath.name) + " \n";
+    } else if (resultOption === "POM"){
+
+    }
+    return result 
   }
 
   function settingsNewPage() {
