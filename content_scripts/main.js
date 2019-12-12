@@ -5,11 +5,10 @@
   window.hasRun = true;
 
   let xpathObjects = new Array();
-  let languageChoice = "JAVA";
 
   let downloadOptions = {
     downloadType: "raw",
-    language: "java"
+    language: "JAVA"
   };
 
   function handleResponse(message) {
@@ -34,7 +33,8 @@
 
   function getReducedString(acc, xpath) {
     console.log("Getting the xpaths passed to reduce");
-    return acc + getWebElements(languageChoice, xpath.topXpath, xpath.name) + " \n";
+    let language = downloadOptions.language
+    return acc + getWebElements(language, xpath.topXpath, xpath.name) + " \n";
   }
 
   function settingsNewPage() {
@@ -82,9 +82,6 @@
       // This can happen if the user denies clipboard permissions:
       console.error('Could not copy text: ', err);
     });
-  
-
-    
   }
 
   /**
@@ -93,6 +90,7 @@
    */
   function openNewPageWithRawResults() {
     console.log("open new page with raw results")
+    // window.open('_blank');
   }
 
 
@@ -148,9 +146,10 @@
   function placePopup(element, X, Y, id) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto; padding: 10px 10px 10px 10px; border-radius: 8px; x-index: 100;";
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto; padding: 10px 10px 10px 10px; border-radius: 8px; box-shadow: 2px 2px 10px;";
     let html = "<form id='zxpath-popup'><input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
       "<p id='zxpath-popup-input'>Select Preffered Xpath</p>" +
+
       "<ol>";
 
       getXpathList(id).forEach(xpath => {
@@ -172,22 +171,22 @@
    * General lick and input listeners for click and input
    */
   document.addEventListener("click", (e) => {
-    if(e.target.id === "zxpath-popup-selection"){
+    if (e.target.id === "zxpath-popup-selection") {
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
-      console.log("tis is the xpath im going to replace -> ",e.target.innerText)
-      swapPrimaryXpath(parseInt(zxpathID),e.target.innerText)
-      console.log("xpathObjects after change -> ",xpathObjects)
+      console.log("tis is the xpath im going to replace -> ", e.target.innerText)
+      swapPrimaryXpath(parseInt(zxpathID), e.target.innerText)
+      console.log("xpathObjects after change -> ", xpathObjects)
     }
-   })
+  })
 
-   document.addEventListener("input", (e) => {
-    if(e.target.id === "zxpath-popup-input"){
+  document.addEventListener("input", (e) => {
+    if (e.target.id === "zxpath-popup-input") {
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
       let inputName = e.target.value;
       setName(parseInt(zxpathID), inputName)
-      console.log("xpathObjects after change -> ",xpathObjects)
+      console.log("xpathObjects after change -> ", xpathObjects)
     }
   })
 
@@ -239,7 +238,7 @@
     let xpathArray = new Array();
     dataArray.forEach(att => {
       let xpath =
-        "//" + elementType + "[@" + att.attribute + " = '" + att.value + "']";
+        "//" + elementType.toLowerCase() + "[@" + att.attribute + " = '" + att.value + "']";
 
       let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
@@ -256,7 +255,7 @@
         name: "Enter_Name",
         topXpath: "NO VALID XPATH",
         xpathList: xpathArray,
-        elementType: elementType
+        elementType: elementType.toLowerCase()
       };
     } else {
       obj = {
@@ -264,7 +263,7 @@
         name: "Enter_Name",
         topXpath: xpathArray[0],
         xpathList: xpathArray,
-        elementType: elementType
+        elementType: elementType.toLowerCase()
       };
     }
 
