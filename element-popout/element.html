@@ -9,51 +9,47 @@
     <title>Element Popout</title>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../popup/bootstrap-4.4.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="./element.css">
 </head>
 
 <body>
-    <!-- <div id="myContainer"> -->
-    <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-    aria-expanded="false">
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
-        focusable="false" width="1em" height="1em"
-        style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
-        preserveAspectRatio="xMidYMid meet" viewBox="0 0 50 50">
-        <path
-            d="M25 42c-9.4 0-17-7.6-17-17S15.6 8 25 8s17 7.6 17 17s-7.6 17-17 17zm0-32c-8.3 0-15 6.7-15 15s6.7 15 15 15s15-6.7 15-15s-6.7-15-15-15z"
-            fill="#FFFFFF" />
-        <path d="M32.283 16.302l1.414 1.415l-15.98 15.98l-1.414-1.414z" fill="#FFFFFF" />
-        <path d="M17.717 16.302l15.98 15.98l-1.414 1.415l-15.98-15.98z" fill="#FFFFFF" /></svg>
-    </button>
-    <!-- </div> -->
-    
+    <div class="dropdown">
+        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
+                focusable="false" width="1em" height="1em"
+                style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);"
+                preserveAspectRatio="xMidYMid meet" viewBox="0 0 50 50">
+                <path
+                    d="M25 42c-9.4 0-17-7.6-17-17S15.6 8 25 8s17 7.6 17 17s-7.6 17-17 17zm0-32c-8.3 0-15 6.7-15 15s6.7 15 15 15s15-6.7 15-15s-6.7-15-15-15z"
+                    fill="#FFFFFF" />
+                <path d="M32.283 16.302l1.414 1.415l-15.98 15.98l-1.414-1.414z" fill="#FFFFFF" />
+                <path d="M17.717 16.302l15.98 15.98l-1.414 1.415l-15.98-15.98z" fill="#FFFFFF" /></svg>
+        </button>
 
-    <div id="dropdown-tooltip" class="dropdown-menu list-group" aria-labelledby="dropdownMenuButton" role="tablist">
-        <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm">
-        <!-- TODO: dynamic list of available xpath here -->
-        <!-- TODO: these are simply example list elements below. they are ready for removal when xpath feature is implemented -->
-        <a class="list-group-item list-group-item-action active" data-toggle="list">example xpath 1</a>
-        <a class="list-group-item list-group-item-action" data-toggle="list">example xpath 2</a>
-        <a class="list-group-item list-group-item-action" data-toggle="list">example xpath 3</a>
-        <a class="list-group-item list-group-item-action" data-toggle="list">example xpath 4</a>
+
+        <div id="dropdown-tooltip" class="dropdown-menu" role="menu">
+            <form class=" list-group">
+                <input class="form-control form-control-sm" type="text" placeholder=".form-control-sm">
+                <a class="list-group-item list-group-item-action active" data-toggle="list">example xpath 1</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list">example xpath 2</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list">example xpath 3</a>
+                <a class="list-group-item list-group-item-action" data-toggle="list">example xpath 4</a>
+            </form>
+
+        </div>
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-        integrity="sha384-nvAa0+6Qg9clwYCGGPpDQLVpLNn0fRaROjHqs13t4Ggj3Ez50XnGQqc/r8MhnRDZ"
-        crossorigin="anonymous"></script>
+    <script src="../popup/jquery-3.4.1.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
-        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
-        crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js">
+    <script src="../popup/popper.min.js"></script>
+    <script src="../popup/bootstrap-4.4.1-dist/js/bootstrap.bundle.min.js">
     </script>
     <script src="./element.js">
-        $(document).ready(function() {
-        waitForClicks();
+        $(document).ready(function () {
+            waitForClicks();
         })
     </script>
 </body>

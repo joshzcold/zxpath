@@ -1,6 +1,8 @@
 
 const browserAppData = this.browser || this.chrome;
 
+let downloadMessage
+
 /**
 * Listen for clicks on the buttons, and send the appropriate message to
 * the content script in the page.
@@ -15,10 +17,12 @@ function listenForClicks() {
       });
     }
 
+
     function sendDownloadCommand(tabs) {
       browserAppData.tabs.sendMessage(tabs[0].id, {
         command: "download",
       });
+
     }
 
     function sendSettingsCommand(tabs) {
@@ -27,10 +31,30 @@ function listenForClicks() {
       });
     }
 
+    function changeDownloadSetting(tabs){
+      console.log(tabs)
+      console.log(downloadMessage)
+      browserAppData.tabs.sendMessage(tabs[0].id, downloadMessage);
+    }
 
+    function saveToFileCommand(tabs){
+      console.log(tabs)
+      console.log(downloadMessage)
+      browserAppData.tabs.sendMessage(tabs[0].id, {
+        command: "saveToFile"
+      });
+    }
+
+    function copyToClipBoardCommand(tabs){
+      console.log(tabs)
+      console.log(downloadMessage)
+      browserAppData.tabs.sendMessage(tabs[0].id, {
+        command: "copyToClipBoard"
+      });
+    }
 
     function reportError(error) {
-      console.error(`Could not beastify: ${error}`);
+      console.error(`Could not execute: ${error}`);
     }
 
     /**
@@ -41,15 +65,63 @@ function listenForClicks() {
       browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(sendSelectCommand)
         .catch(reportError);
-    } else if (e.target.classList.contains("download")) {
+    } 
+
+    if(e.target.id === "downloadTypeRaw"){
+      console.log("downloadTypeRaw")
+       downloadMessage = {
+        command: "changeDownload",
+        downloadType: "raw"
+      }
       browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(sendDownloadCommand)
-        .catch(reportError);
-    } else if (e.target.classList.contains("settings")) {
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(sendSettingsCommand)
+        .then(changeDownloadSetting)
         .catch(reportError);
     }
+
+    if(e.target.id === "downloadTypeFile"){
+      console.log("downloadTypeFile")
+      downloadMessage = {
+        command: "changeDownload",
+        downloadType: "file"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+
+    if(e.target.id === "programLanguageJava"){
+      console.log("programLanguageJava")
+      downloadMessage = {
+        command: "changeDownload",
+        language: "java"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+    if(e.target.id === "programLanguagePython"){
+      console.log("programLanguagePython")
+      downloadMessage = {
+        command: "changeDownload",
+        language: "python"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+    if(e.target.id === "saveToFileButton"){
+      console.log("saveToFileButton")
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(saveToFileCommand)
+        .catch(reportError);
+    }
+    if(e.target.id === "copyToClipBoardButton"){
+      console.log("copyToClipBoardButton")
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(copyToClipBoardCommand)
+        .catch(reportError);
+    }
+
   });
 }
 

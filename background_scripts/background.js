@@ -106,14 +106,23 @@ function handleMessage(request, sender, sendResponse) {
       });
   }
 
+  let sendElementPopoutCommand = (contentArg, commandArg) => {
+    browserAppData.tabs.sendMessage({
+      content: contentArg,
+      command: commandArg
+    })
+  }
+
   if(request.command === "getXpath"){
     browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(sendGetXPathCommand)
         .catch((e) => {console.log(e)})
-  } 
+  }
+  else if (request.command === "elementCommand") {
+    console.log("HELLO, inside of elementCommand in background.js")
+    sendElementPopoutCommand(request.content, request.command);
+  }
 
-  
- 
   sendResponse({response: "Background sent event to main"});
 }
 

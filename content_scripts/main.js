@@ -7,6 +7,11 @@
   let xpathObjects = new Array();
   let languageChoice = "JAVA";
 
+  let downloadOptions = {
+    downloadType: "raw",
+    language: "java"
+  };
+
   function handleResponse(message) {
     console.log(`Message from the background script:  ${message.response}`);
   }
@@ -37,31 +42,87 @@
     console.log("SETTINGS PAGE");
   }
 
+  /**
+   * Get valid xpaths and put them into popups
+   * The main function of this extension
+   * @param {*} message
+   */
+  function executeGetXpath(message) {
+    let element = elementFromCord(message.element.X, message.element.Y);
+    console.log("this is element outside of the promise", element);
+
+    // place popup in dom
+    placePopup(element, message.element.X, message.element.Y);
+
+    // async call to get selector data
+    var promise = new Promise(function(resolve, reject) {
+      let result = getXpathData(element);
+      if (result !== null) {
+        resolve(result);
+      } else {
+        reject(Error(result));
+      }
+    });
+    // populate the popup with data
+    populatePopup(promise);
+  }
+
+  /**
+   * either save the results to a file for download
+   * or send the results to a new raw page
+   */
+  function saveResultToFile(){
+    if(downloadOptions.downloadType === "raw"){
+      openNewPageWithRawResults()
+    } else{
+      console.log("save results to file ")
+    }
+  }
+
+  /**
+   * copy results to clipboard 
+   */
+  function copyResultToClipBoard(){
+    console.log("copy results to clipboard")
+  }
+
+  /**
+   * open a new blank page with just text of the results 
+   * so users can just copy and paste what they want
+   */
+  function openNewPageWithRawResults(){
+    console.log("open new page with raw results")
+  }
+
+  /**
+   * Listening for main toolbar button presses
+   */
   browser.runtime.onMessage.addListener(message => {
     if (message.command === "download") {
       downloadPopup();
     } else if (message.command === "settings") {
       settingsNewPage();
     } else if (message.command === "getXpath") {
-     let element = elementFromCord(message.element.X, message.element.Y);
-      console.log("this is element outside of the promise", element);
-      // place popup in dom
-      placePopup(element)
-        
-      // async call to get selector data
-      var promise = new Promise(function(resolve, reject) {
-        console.log(
-            "Sending this to getXpathData " + element
-          );
-        let result = getXpathData(element);
-        if (result !== null) {
-          resolve( result);
-        } else {
-          reject(Error(result));
-        }
-      });
-      // populate the popup with data
-      populatePopup(promise);
+      executeGetXpath(message);
+    } else if (message.command === "elementCommand") {
+      console.log("HELLO, inside of elementCommand in main.js");
+      console.log(message.content);
+    } else if (message.command === "changeDownload") {
+      console.log("downloadOptions before change -> ", downloadOptions);
+      console.log("changeDownload Message from toolbar ->", message);
+      if (message.language !== undefined) {
+        downloadOptions.language = message.language;
+      }
+      if (message.downloadType !== undefined) {
+        downloadOptions.downloadType = message.downloadType;
+      }
+      console.log("downloadOptions after change -> ", downloadOptions);
+    } else if (message.command === "saveToFile") {
+      console.log("saveToFile Message from toolbar ->", message);
+      saveResultToFile()
+    } else if (message.command === "copyToClipBoard") {
+      console.log("copyToClipBoard Message from toolbar ->", message);
+      copyResultToClipBoard()
     }
   });
 
@@ -81,10 +142,28 @@
     return element;
   }
 
-  function placePopup(element){
-    /**
-         * REED PLACE POPUP IN DOM HERE 
-         */
+  function placePopup(element, X, Y) {
+    let newX = X + window.pageXOffset;
+    let newY = Y + window.pageYOffset;
+    let style =
+      "position: absolute; left: " +
+      newX +
+      "px; top: " +
+      newY +
+      "px; background:none transparent; width:auto;";
+
+    let url = browser.runtime.getURL("element-popout/element.html");
+    let iframe = document.createElement("iframe");
+    iframe.setAttribute("src", url);
+    iframe.setAttribute("style", style);
+    iframe.setAttribute("allowtransparency", "true");
+    iframe.setAttribute("frameBorder", "0");
+    iframe.setAttribute("scrolling", "no");
+    iframe.setAttribute("id", "zxpath-iframe");
+
+    var div = document.createElement("div");
+
+    document.getElementById("insertPopup").appendChild(iframe);
   }
 
   function populatePopup(xpathDataPromise) {
@@ -165,10 +244,23 @@
     });
 
     let obj;
+    let id = Math.floor(10000000 + Math.random() * 90000000);
     if (xpathArray.length === 0) {
-      obj = { topXpath: "NO VALID XPATH", xpathList: xpathArray };
+      obj = {
+        id: id,
+        name: "Enter_Name",
+        topXpath: "NO VALID XPATH",
+        xpathList: xpathArray,
+        elementType: elementType
+      };
     } else {
-      obj = { topXpath: xpathArray[0], xpathList: xpathArray };
+      obj = {
+        id: id,
+        name: "Enter_Name",
+        ttopXpath: xpathArray[0],
+        xpathList: xpathArray,
+        elementType: elementType
+      };
     }
 
     xpathObjects.push(obj);
@@ -205,24 +297,42 @@
 
   function generateWebElements(language, xpath) {
     let javaCodeArray = new Array();
-    let code = getWebElementsByLanguage(language, xpath);
-    javaCodeArray.push(code);
-    console.log(javaCodeArray);
+
+    xpathObjects
+      .map(obj => obj.topXpath)
+      .forEach(att => {
+        let code = getWebElements(language, att);
+        javaCodeArray.push(code);
+      });
     return javaCodeArray;
   }
 
   function getWebElementsByLanguage(language, xpath) {
     switch (language) {
       case "JAVA":
-        return 'driver.findElement(By.xpath("' + xpath + '"));';
+        return (
+          'WebElement <REPLACE_NAME> = driver.findElement(By.xpath("' +
+          xpath +
+          '"));'
+        );
       case "C#":
-        return 'driver.findElement(By.xpath("' + xpath + '"));';
+        return (
+          'IWebElement <REPLACE_NAME>> = driver.findElement(By.xpath("' +
+          xpath +
+          '"));'
+        );
       case "PERL":
         return "$driver->find_element('" + xpath + "');";
       case "PHP":
-        return "$driver->findElement(WebDriverBy::xpath('" + xpath + "'));";
+        return (
+          "$<REPLACE_NAME>> = $driver->findElement(WebDriverBy::xpath('" +
+          xpath +
+          "'));"
+        );
       case "PYTHON":
-        return 'driver.find_element_by_xpath("' + xpath + '")';
+        return (
+          '<REPLACE_NAME>> = driver.find_element_by_xpath("' + xpath + '")'
+        );
       case "RUBY":
         return '@driver.find_element(:xpath,"' + xpath + '")';
     }
