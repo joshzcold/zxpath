@@ -131,12 +131,12 @@
     let newY = Y + window.pageYOffset;
     let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
     let html = "<form>" +
-      "Element ID: " + id + "<input id='zxpath-popup-input' placeholder= 'Enter Element Name'></input><br>" +
+      "Element ID: " + id + "<input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
       "<p>Select Preffered Xpath</p>" +
       "<ol>";
 
     getXpaths().forEach(xpath => {
-      html += "<li id='zxpath-popup-selection'>" + xpath + "</li>";
+      html += "<li id='zxpath-popup-selection' zxpathid="+id+">" + xpath + "</li>";
     });
 
     html += "</ol>" +
@@ -158,7 +158,7 @@
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
 
-      console.log(e.target.innerText)
+      console.log("tis is the xpath im going to replace -> ",e.target.innerText)
 
       let response = browser.runtime.sendMessage({
         command: "elementCommand",
@@ -175,7 +175,7 @@
       console.log("this is the ID I got ->", zxpathID)
 
       let inputName = e.target.value;
-      console.log("This is new xpath value -> ", inputName);
+      console.log("This is new xpath name value -> ", inputName);
     }
   })
 
