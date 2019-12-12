@@ -1,4 +1,4 @@
-(function() {
+(function () {
   if (window.hasRun) {
     return;
   }
@@ -53,10 +53,10 @@
    * either save the results to a file for download
    * or send the results to a new raw page
    */
-  function saveResultToFile(){
-    if(downloadOptions.downloadType === "raw"){
+  function saveResultToFile() {
+    if (downloadOptions.downloadType === "raw") {
       openNewPageWithRawResults()
-    } else{
+    } else {
       console.log("save results to file ")
     }
   }
@@ -64,7 +64,7 @@
   /**
    * copy results to clipboard 
    */
-  function copyResultToClipBoard(){
+  function copyResultToClipBoard() {
     console.log("copy results to clipboard")
   }
 
@@ -72,25 +72,10 @@
    * open a new blank page with just text of the results 
    * so users can just copy and paste what they want
    */
-  function openNewPageWithRawResults(){
+  function openNewPageWithRawResults() {
     console.log("open new page with raw results")
   }
 
-   document.addEventListener("click", (e) => {
-    if(e.target.id === "zxpath-popup-selection"){
-      console.log("HELLO WORLD CLICK")
-      let zxpathID = e.target.getAttribute("zxpathid")
-      console.log("this is the ID I got ->", zxpathID)
-    }
-   })
-
-   document.addEventListener("input", (e) => {
-    if(e.target.id === "zxpath-popup-input"){
-      console.log("HELLO WORLD INPUT")
-      let zxpathID = e.target.getAttribute("zxpathid")
-      console.log("this is the ID I got ->", zxpathID)
-    }
-  })
 
   /**
    * Listening for main toolbar button presses
@@ -146,16 +131,16 @@
     let newY = Y + window.pageYOffset;
     let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
     let html = "<form>" +
-    "Element ID: " + id + "<input id='zxpath-popup-input' zxpathID="+id + " placeholder= 'Enter Element Name'></input><br>" +
-    "<p>Select Preffered Xpath</p>" + 
-    "<ol>";
+      "Element ID: " + id + "<input id='zxpath-popup-input' placeholder= 'Enter Element Name'></input><br>" +
+      "<p>Select Preffered Xpath</p>" +
+      "<ol>";
 
     getXpaths().forEach(xpath => {
-      html += "<li id='zxpath-popup-selection' zxpathID="+id + ">" + xpath + "</li>";
+      html += "<li id='zxpath-popup-selection'>" + xpath + "</li>";
     });
-    
+
     html += "</ol>" +
-    "</form>";
+      "</form>";
 
     console.log(html);
     var div = document.createElement("div");
@@ -163,10 +148,37 @@
     div.style = style;
 
     document.getElementById("insertPopup").appendChild(div);
-    
   }
 
- 
+  /**
+   * General lick and input listeners for click and input
+   */
+  document.addEventListener("click", (e) => {
+    if(e.target.id === "zxpath-popup-selection"){
+      let zxpathID = e.target.getAttribute("zxpathid")
+      console.log("this is the ID I got ->", zxpathID)
+
+      console.log(e.target.innerText)
+
+      let response = browser.runtime.sendMessage({
+        command: "elementCommand",
+        selectedXpath: e.target.textContent
+    });
+
+    response.then(handleResponse, handleError);
+    }
+   })
+
+   document.addEventListener("input", (e) => {
+    if(e.target.id === "zxpath-popup-input"){
+      let zxpathID = e.target.getAttribute("zxpathid")
+      console.log("this is the ID I got ->", zxpathID)
+
+      let inputName = e.target.value;
+      console.log("This is new xpath value -> ", inputName);
+    }
+  })
+
 
   /**
    * @param {*} clickedElement
@@ -253,7 +265,7 @@
     return obj;
   }
 
-  /****** Language Output ******/ 
+  /****** Language Output ******/
 
   function getXpaths() {
     return xpathObjects.map(obj => obj.topXpath);
@@ -304,12 +316,12 @@
 
   function setName(id, newName) {
     xpathObjects = xpathObjects.map(obj => {
-      if(obj.id === id) {
+      if (obj.id === id) {
         return { ...obj, name: name };
       }
-      else{
+      else {
         return obj
-      } 
+      }
     });
   }
 
