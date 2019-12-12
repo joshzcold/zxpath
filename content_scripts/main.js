@@ -76,6 +76,22 @@
     console.log("open new page with raw results")
   }
 
+   document.addEventListener("click", (e) => {
+    if(e.target.id === "zxpath-popup-selection"){
+      console.log("HELLO WORLD CLICK")
+      let zxpathID = e.target.getAttribute("zxpathid")
+      console.log("this is the ID I got ->", zxpathID)
+    }
+   })
+
+   document.addEventListener("input", (e) => {
+    if(e.target.id === "zxpath-popup-input"){
+      console.log("HELLO WORLD INPUT")
+      let zxpathID = e.target.getAttribute("zxpathid")
+      console.log("this is the ID I got ->", zxpathID)
+    }
+  })
+
   /**
    * Listening for main toolbar button presses
    */
@@ -135,7 +151,7 @@
     "<ol>";
 
     getXpaths().forEach(xpath => {
-      html += "<li id='zxpath-popup-selection'>" + xpath + "</li>";
+      html += "<li id='zxpath-popup-selection' zxpathID="+id + ">" + xpath + "</li>";
     });
     
     html += "</ol>" +
@@ -147,12 +163,7 @@
     div.style = style;
 
     document.getElementById("insertPopup").appendChild(div);
-    document.getElementById("zxpath-popup-selection").addEventListener("click", function(){
-      console.log("HELLO WORLD CLICK")
-     }); 
-     document.getElementById("zxpath-popup-input").addEventListener("input", function(){
-       console.log("HELLO WORLD INPUT")
-      }); 
+    
   }
 
  
