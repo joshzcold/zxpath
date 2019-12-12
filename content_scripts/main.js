@@ -94,6 +94,7 @@
     iframe.setAttribute("allowtransparency", "true")
     iframe.setAttribute("frameBorder", "0")
     iframe.setAttribute("scrolling", "no")
+    iframe.setAttribute("id", "zxpath-iframe")
 
 
     var div = document.createElement("div");
@@ -178,10 +179,11 @@
     });
 
     let obj;
+    let id = Math.floor(10000000 + Math.random() * 90000000);
     if (xpathArray.length === 0) {
-      obj = {topXpath: "NO VALID XPATH", xpathList: xpathArray, elementType: elementType};
+      obj = {id: id, name: "Enter_Name", topXpath: "NO VALID XPATH", xpathList: xpathArray, elementType: elementType};
     } else {
-      obj = {topXpath: xpathArray[0], xpathList: xpathArray, elementType: elementType};
+      obj = {id: id, name: "Enter_Name", ttopXpath: xpathArray[0], xpathList: xpathArray, elementType: elementType};
     }
 
     xpathObjects.push(obj);

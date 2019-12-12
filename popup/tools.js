@@ -15,6 +15,21 @@ function listenForClicks() {
       });
     }
 
+
+    function sendDownloadCommand(tabs) {
+      browserAppData.tabs.sendMessage(tabs[0].id, {
+        command: "download",
+      });
+
+    }
+
+    function sendSettingsCommand(tabs) {
+      browserAppData.tabs.sendMessage(tabs[0].id, {
+        command: "settings",
+      });
+    }
+
+
     function reportError(error) {
       console.error(`Could not beastify: ${error}`);
     }
