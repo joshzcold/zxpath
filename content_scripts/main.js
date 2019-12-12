@@ -130,9 +130,9 @@
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
     let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
-    let html = "<form>" +
+    let html = "<form id='zxpath-popup'>" +
       "Element ID: " + id + "<input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
-      "<p>Select Preffered Xpath</p>" +
+      "<p id='zxpath-popup'>Select Preffered Xpath</p>" +
       "<ol>";
 
     getXpaths().forEach(xpath => {
@@ -142,8 +142,8 @@
     html += "</ol>" +
       "</form>";
 
-    console.log(html);
     var div = document.createElement("div");
+    div.setAttribute("id", "zxpath-popup")
     div.innerHTML = html;
     div.style = style;
 
