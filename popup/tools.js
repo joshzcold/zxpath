@@ -87,6 +87,39 @@ function listenForClicks() {
         .catch(reportError);
     }
 
+    if(e.target.id === "resultTypeRaw"){
+      console.log("resultTypeRaw")
+      downloadMessage = {
+        command: "changeDownload",
+        result: "XPATH"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+
+    if(e.target.id === "resultTypeVariables"){
+      console.log("resultTypeVariables")
+      downloadMessage = {
+        command: "changeDownload",
+        result: "VAR"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+
+    if(e.target.id === "resultTypePom"){
+      console.log("resultTypePom")
+      downloadMessage = {
+        command: "changeDownload",
+        result: "POM"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+
     if(e.target.id === "programLanguageJava"){
       console.log("programLanguageJava")
       downloadMessage = {

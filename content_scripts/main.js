@@ -8,7 +8,8 @@
 
   let downloadOptions = {
     downloadType: "raw",
-    language: "JAVA"
+    language: "JAVA",
+    result: "XPATH"
   };
 
   function handleResponse(message) {
@@ -115,6 +116,9 @@
       }
       if (message.downloadType !== undefined) {
         downloadOptions.downloadType = message.downloadType;
+      }
+      if (message.result !== undefined) {
+        downloadOptions.result = message.result;
       }
       console.log("downloadOptions after change -> ", downloadOptions);
     } else if (message.command === "saveToFile") {

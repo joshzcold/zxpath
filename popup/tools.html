@@ -34,6 +34,7 @@
       <div class="card card-body download-modal-body">
 
         <div class="modal-section" id="download-type">
+
           <h5>Save As</h5>
 
           <div class="form-check">
@@ -104,6 +105,35 @@
                     </label>
                   </div>
         </div>
+
+
+        <div class="modal-section" id="output-type">
+          
+            <h5>Result Type</h5>
+  
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="downloadType" id="resultTypeRaw" value="raw" checked>
+              <label class="form-check-label" for="resultTypeRaw">
+                Raw Xpaths
+              </label>
+            </div>
+  
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="downloadType" id="resultTypeVariables" value="file">
+              <label class="form-check-label" for="resultTypeVariables">
+                WebElement Variables
+              </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="downloadType" id="resultTypePom" value="file">
+                <label class="form-check-label" for="resultTypePom">
+                  Full Page Object Modal
+                </label>
+              </div>
+  
+          </div>
+
         <div class="button-group">
           <button type="button" class="btn btn-primary" id="saveToFileButton">Save</button>
           <button type="button" class="btn btn-secondary" id="copyToClipBoardButton">
