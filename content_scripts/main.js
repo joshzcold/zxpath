@@ -5,11 +5,10 @@
   window.hasRun = true;
 
   let xpathObjects = new Array();
-  let languageChoice = "JAVA";
 
   let downloadOptions = {
     downloadType: "raw",
-    language: "java"
+    language: "JAVA"
   };
 
   function handleResponse(message) {
@@ -34,7 +33,8 @@
 
   function getReducedString(acc, xpath) {
     console.log("Getting the xpaths passed to reduce");
-    return acc + getWebElements(languageChoice, xpath.topXpath, xpath.name) + " \n";
+    let language = downloadOptions.language
+    return acc + getWebElements(language, xpath.topXpath, xpath.name) + " \n";
   }
 
   function settingsNewPage() {
@@ -171,22 +171,22 @@
    * General lick and input listeners for click and input
    */
   document.addEventListener("click", (e) => {
-    if(e.target.id === "zxpath-popup-selection"){
+    if (e.target.id === "zxpath-popup-selection") {
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
-      console.log("tis is the xpath im going to replace -> ",e.target.innerText)
-      swapPrimaryXpath(parseInt(zxpathID),e.target.innerText)
-      console.log("xpathObjects after change -> ",xpathObjects)
+      console.log("tis is the xpath im going to replace -> ", e.target.innerText)
+      swapPrimaryXpath(parseInt(zxpathID), e.target.innerText)
+      console.log("xpathObjects after change -> ", xpathObjects)
     }
-   })
+  })
 
-   document.addEventListener("input", (e) => {
-    if(e.target.id === "zxpath-popup-input"){
+  document.addEventListener("input", (e) => {
+    if (e.target.id === "zxpath-popup-input") {
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
       let inputName = e.target.value;
       setName(parseInt(zxpathID), inputName)
-      console.log("xpathObjects after change -> ",xpathObjects)
+      console.log("xpathObjects after change -> ", xpathObjects)
     }
   })
 
@@ -238,7 +238,7 @@
     let xpathArray = new Array();
     dataArray.forEach(att => {
       let xpath =
-        "//" + elementType + "[@" + att.attribute + " = '" + att.value + "']";
+        "//" + elementType.toLowerCase() + "[@" + att.attribute + " = '" + att.value + "']";
 
       let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
@@ -255,7 +255,7 @@
         name: "Enter_Name",
         topXpath: "NO VALID XPATH",
         xpathList: xpathArray,
-        elementType: elementType
+        elementType: elementType.toLowerCase()
       };
     } else {
       obj = {
@@ -263,7 +263,7 @@
         name: "Enter_Name",
         topXpath: xpathArray[0],
         xpathList: xpathArray,
-        elementType: elementType
+        elementType: elementType.toLowerCase()
       };
     }
 

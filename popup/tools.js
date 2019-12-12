@@ -93,7 +93,7 @@ function listenForClicks() {
       console.log("programLanguageJava")
       downloadMessage = {
         command: "changeDownload",
-        language: "java"
+        language: "JAVA"
       }
       browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(changeDownloadSetting)
@@ -103,12 +103,54 @@ function listenForClicks() {
       console.log("programLanguagePython")
       downloadMessage = {
         command: "changeDownload",
-        language: "python"
+        language: "PYTHON"
       }
       browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(changeDownloadSetting)
         .catch(reportError);
     }
+
+    if(e.target.id === "programLanguageCSharp"){
+      console.log("programLanguageCSharp")
+      downloadMessage = {
+        command: "changeDownload",
+        language: "C#"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+    if(e.target.id === "programLanguagePHP"){
+      console.log("programLanguagePHP")
+      downloadMessage = {
+        command: "changeDownload",
+        language: "PHP"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+    if(e.target.id === "programLanguagePerl"){
+      console.log("programLanguagePerl")
+      downloadMessage = {
+        command: "changeDownload",
+        language: "PERL"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+    if(e.target.id === "programLanguageRuby"){
+      console.log("programLanguageRuby")
+      downloadMessage = {
+        command: "changeDownload",
+        language: "RUBY"
+      }
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(changeDownloadSetting)
+        .catch(reportError);
+    }
+    
     if(e.target.id === "saveToFileButton"){
       console.log("saveToFileButton")
       browserAppData.tabs.query({ active: true, currentWindow: true })
