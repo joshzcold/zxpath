@@ -130,7 +130,7 @@
     let newY = Y + window.pageYOffset;
     let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
     let html = "<form>" +
-    "Element ID: " + id + "<input id='zxpath-popup-input' placeholder= 'Enter Element Name'></input><br>" +
+    "Element ID: " + id + "<input id='zxpath-popup-input' zxpathID="+id + " placeholder= 'Enter Element Name'></input><br>" +
     "<p>Select Preffered Xpath</p>" + 
     "<ol>";
 
