@@ -130,12 +130,12 @@
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
     let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto; padding: 10px 10px 10px 10px; border-radius: 8px; box-shadow: 2px 2px 10px;";
-    let html = "<form><input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
-      "<p>Select Preffered Xpath</p>" +
+    let html = "<form><input id='zxpath-popup-input'  zxpathid=" + id + " placeholder= 'Enter Element Name'></input><br>" +
+      "<p>Select Preferred Xpath</p>" +
       "<ol>";
 
     getXpaths().forEach(xpath => {
-      html += "<li id='zxpath-popup-selection' zxpathid="+id+">" + xpath + "</li>";
+      html += "<li id='zxpath-popup-selection' zxpathid=" + id + ">" + xpath + "</li>";
     });
 
     html += "</ol>" +
@@ -153,22 +153,22 @@
    * General lick and input listeners for click and input
    */
   document.addEventListener("click", (e) => {
-    if(e.target.id === "zxpath-popup-selection"){
+    if (e.target.id === "zxpath-popup-selection") {
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
-      console.log("tis is the xpath im going to replace -> ",e.target.innerText)
-      swapPrimaryXpath(parseInt(zxpathID),e.target.innerText)
-      console.log("xpathObjects after change -> ",xpathObjects)
+      console.log("tis is the xpath im going to replace -> ", e.target.innerText)
+      swapPrimaryXpath(parseInt(zxpathID), e.target.innerText)
+      console.log("xpathObjects after change -> ", xpathObjects)
     }
-   })
+  })
 
-   document.addEventListener("input", (e) => {
-    if(e.target.id === "zxpath-popup-input"){
+  document.addEventListener("input", (e) => {
+    if (e.target.id === "zxpath-popup-input") {
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
       let inputName = e.target.value;
       setName(parseInt(zxpathID), inputName)
-      console.log("xpathObjects after change -> ",xpathObjects)
+      console.log("xpathObjects after change -> ", xpathObjects)
     }
   })
 
