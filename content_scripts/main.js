@@ -51,19 +51,8 @@
     console.log("this is element outside of the promise", element);
 
     // place popup in dom
-    placePopup(element, message.element.X, message.element.Y);
-
-    // async call to get selector data
-    var promise = new Promise(function(resolve, reject) {
-      let result = getXpathData(element);
-      if (result !== null) {
-        resolve(result);
-      } else {
-        reject(Error(result));
-      }
-    });
-    // populate the popup with data
-    populatePopup(promise);
+    let result = getXpathData(element);
+    placePopup(element, message.element.X, message.element.Y, result.id);
   }
 
   /**
@@ -154,28 +143,38 @@
     return element;
   }
 
-  function placePopup(element, X, Y) {
+  function placePopup(element, X, Y, id) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let style =
-      "position: absolute; left: " +
-      newX +
-      "px; top: " +
-      newY +
-      "px; background:none transparent; width:auto;";
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
 
-    let url = browser.runtime.getURL("element-popout/element.html");
-    let iframe = document.createElement("iframe");
-    iframe.setAttribute("src", url);
-    iframe.setAttribute("style", style);
-    iframe.setAttribute("allowtransparency", "true");
-    iframe.setAttribute("frameBorder", "0");
-    iframe.setAttribute("scrolling", "no");
-    iframe.setAttribute("id", "zxpath-iframe");
+    // let url = browser.runtime.getURL("element-popout/element.html");
+    // let iframe = document.createElement("iframe");
+    // iframe.setAttribute("src", url);
+    // iframe.setAttribute("style", style);
+    // iframe.setAttribute("allowtransparency", "true");
+    // iframe.setAttribute("frameBorder", "0");
+    // iframe.setAttribute("scrolling", "no");
+    // iframe.setAttribute("id", "zxpath-iframe");
 
+    let html = "<form>" +
+    "Element ID: " + id + "<input placeholder= 'Enter Element Name'></input><br>" +
+    "<p>Select Preffered Xpath</p>" + 
+    "<ol>";
+
+    getXpaths().forEach(xpath => {
+      html += "<li>" + xpath + "</li>";
+    });
+    
+    html += "</ol>" +
+    "</form>";
+
+    console.log(html);
     var div = document.createElement("div");
+    div.innerHTML = html;
+    div.style = style;
 
-    document.getElementById("insertPopup").appendChild(iframe);
+    document.getElementById("insertPopup").appendChild(div);
   }
 
   function populatePopup(xpathDataPromise) {
@@ -280,15 +279,44 @@
     return obj;
   }
 
-  /**
-   * @param {*} objectIndex This will be which 'object' or element the user wants to swap xpath's for.
-   * @param {*} xpathIndex The index of the newly selected object that needs to replace 'topXpath'
-   *
-   * Change topXpath to the xpath the user would prefer.
-   */
-  function swapPrimaryXpath(topXpath, newXpath) {
+  /****** Language Output ******/ 
+
+  function generateWebElements(language, xpath) {
+    let javaCodeArray = new Array();
+
+    xpathObjects.forEach(obj => {
+      let code = getWebElements(language, obj.topXpath, obj.name);
+      javaCodeArray.push(code);
+    });
+    return javaCodeArray;
+  }
+
+  function getWebElements(language, xpath, name) {
+    switch (language) {
+      case "JAVA":
+        return ('WebElement ' + name + ' = driver.findElement(By.xpath("' + xpath + '"));');
+      case "C#":
+        return ('IWebElement ' + name + ' = driver.findElement(By.xpath("' + xpath + '"));');
+      case "PERL":
+        return ('my $' + name + ' = $driver->find_element(\'' + xpath + '\');');
+      case "PHP":
+        return ('$' + name + ' = $driver->findElement(WebDriverBy::xpath(\'' + xpath + '\'));');
+      case "PYTHON":
+        return (name + ' = driver.find_element_by_xpath("' + xpath + '")');
+      case "RUBY":
+        return (name + ' = @driver.find_element(:xpath,"' + xpath + '")');
+    }
+  }
+
+  function getJavaPOM(name) {
+
+  }
+
+  /***** Utility Functions ******/
+
+  function swapPrimaryXpath(id, newXpath) {
     xpathObjects = xpathObjects.map(obj => {
-      if (obj.topXpath == topXpath) {
+      if (obj.id == id) {
         return { ...obj, topXpath: newXpath };
       } else {
         return obj;
@@ -296,57 +324,20 @@
     });
   }
 
-  /**
-   * @param {*} index The index of the xpathObjects.
-   *
-   * If a user decides they don't want an element they can deselect it and we stop worrying about it.
-   */
-  function deselectElement(topXpath) {
-    xpathObjects = xpathObjects.filter(obj => {
-      return obj.topXpath !== topXpath;
+  function setName(id, newName) {
+    xpathObjects = xpathObjects.map(obj => {
+      if(obj.id === id) {
+        return { ...obj, name: name };
+      }
+      else{
+        return obj
+      } 
     });
   }
 
-  function generateWebElements(language, xpath) {
-    let javaCodeArray = new Array();
-
-    xpathObjects
-      .map(obj => obj.topXpath)
-      .forEach(att => {
-        let code = getWebElements(language, att);
-        javaCodeArray.push(code);
-      });
-    return javaCodeArray;
-  }
-
-  function getWebElementsByLanguage(language, xpath) {
-    switch (language) {
-      case "JAVA":
-        return (
-          'WebElement <REPLACE_NAME> = driver.findElement(By.xpath("' +
-          xpath +
-          '"));'
-        );
-      case "C#":
-        return (
-          'IWebElement <REPLACE_NAME>> = driver.findElement(By.xpath("' +
-          xpath +
-          '"));'
-        );
-      case "PERL":
-        return "$driver->find_element('" + xpath + "');";
-      case "PHP":
-        return (
-          "$<REPLACE_NAME>> = $driver->findElement(WebDriverBy::xpath('" +
-          xpath +
-          "'));"
-        );
-      case "PYTHON":
-        return (
-          '<REPLACE_NAME>> = driver.find_element_by_xpath("' + xpath + '")'
-        );
-      case "RUBY":
-        return '@driver.find_element(:xpath,"' + xpath + '")';
-    }
+  function deselectElement(id) {
+    xpathObjects = xpathObjects.filter(obj => {
+      return obj.id !== id;
+    });
   }
 })();
