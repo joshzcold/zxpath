@@ -17,14 +17,6 @@ function listenForClicks() {
       });
     }
 
-
-    function sendDownloadCommand(tabs) {
-      browserAppData.tabs.sendMessage(tabs[0].id, {
-        command: "download",
-      });
-
-    }
-
     function sendSettingsCommand(tabs) {
       browserAppData.tabs.sendMessage(tabs[0].id, {
         command: "settings",
@@ -64,6 +56,12 @@ function listenForClicks() {
     if (e.target.classList.contains("select")) {
       browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(sendSelectCommand)
+        .catch(reportError);
+    } 
+
+    if (e.target.classList.contains("settings")) {
+      browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(sendSettingsCommand)
         .catch(reportError);
     } 
 
