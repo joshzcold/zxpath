@@ -108,6 +108,7 @@
     }
   });
 
+
   function elementFromCord(X, Y) {
     let element;
     if (typeof X === "number" && typeof Y === "number") {
@@ -128,23 +129,13 @@
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
     let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
-
-    // let url = browser.runtime.getURL("element-popout/element.html");
-    // let iframe = document.createElement("iframe");
-    // iframe.setAttribute("src", url);
-    // iframe.setAttribute("style", style);
-    // iframe.setAttribute("allowtransparency", "true");
-    // iframe.setAttribute("frameBorder", "0");
-    // iframe.setAttribute("scrolling", "no");
-    // iframe.setAttribute("id", "zxpath-iframe");
-
     let html = "<form>" +
-    "Element ID: " + id + "<input placeholder= 'Enter Element Name'></input><br>" +
+    "Element ID: " + id + "<input id='zxpath-popup-input' placeholder= 'Enter Element Name'></input><br>" +
     "<p>Select Preffered Xpath</p>" + 
     "<ol>";
 
     getXpaths().forEach(xpath => {
-      html += "<li>" + xpath + "</li>";
+      html += "<li id='zxpath-popup-selection'>" + xpath + "</li>";
     });
     
     html += "</ol>" +
@@ -156,22 +147,15 @@
     div.style = style;
 
     document.getElementById("insertPopup").appendChild(div);
+    document.getElementById("zxpath-popup-selection").addEventListener("click", function(){
+      console.log("HELLO WORLD CLICK")
+     }); 
+     document.getElementById("zxpath-popup-input").addEventListener("input", function(){
+       console.log("HELLO WORLD INPUT")
+      }); 
   }
 
-  function populatePopup(xpathDataPromise) {
-    console.log("placeZXPathPopup -> xpathDataPromise", xpathDataPromise);
-    xpathDataPromise.then(
-      function(result) {
-        console.log("result ->", result); // populate the popup
-        /**
-         * REED POPULATE WITH DATA HERE
-         */
-      },
-      function(err) {
-        console.log(err); // Error: "It broke"
-      }
-    );
-  }
+ 
 
   /**
    * @param {*} clickedElement
