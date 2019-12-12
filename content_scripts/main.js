@@ -34,18 +34,8 @@
 
   function getReducedString(acc, xpath) {
     console.log("Getting the xpaths passed to reduce");
-    let result
     let language = downloadOptions.language
-    let resultOption = downloadOptions.result
-
-    if(resultOption === "XPATH"){
-
-    } else if (resultOption === "VAR"){
-      result = acc + getWebElements(language, xpath.topXpath, xpath.name) + " \n";
-    } else if (resultOption === "POM"){
-
-    }
-    return result 
+    return  acc + getWebElements(language, xpath.topXpath, xpath.name) + " \n"; 
   }
 
   function settingsNewPage() {
@@ -74,8 +64,24 @@
     if (downloadOptions.downloadType === "raw") {
       openNewPageWithRawResults()
     } else{
-      let fileformatter = xpathObjects.reduce(getReducedString, "");
-      var blob = new Blob([fileformatter], {type: "text/plain;charset=utf-8"});
+      let fileFormatter
+      let resultOption = downloadOptions.result
+      let language = downloadOptions.language
+      console.log(downloadOptions)
+      if(resultOption === "XPATH"){
+
+      } else if (resultOption === "VAR"){
+        console.log("hellow orld")
+        fileFormatter =  xpathObjects.reduce(getReducedString, "");
+      } else if (resultOption === "POM"){
+        if(language === "JAVA"){
+          fileFormatter =  getJavaPOM() 
+        } else{
+          alert("language isn't supported for full POM yet")
+        }
+      }
+
+      var blob = new Blob([fileFormatter], {type: "text/plain;charset=utf-8"});
       saveAs(blob, "page-results.txt");
     }
   }
@@ -84,8 +90,27 @@
    * copy results to clipboard 
    */
   function copyResultToClipBoard(){
-    let fileformatter = xpathObjects.reduce(getReducedString, "");
-    navigator.clipboard.writeText(fileformatter)
+
+    let fileFormatter
+    let resultOption = downloadOptions.result
+    let language = downloadOptions.language
+    console.log(downloadOptions)
+    if(resultOption === "XPATH"){
+
+    } else if (resultOption === "VAR"){
+      fileFormatter =  xpathObjects.reduce(getReducedString, "");
+    } else if (resultOption === "POM"){
+      if(language === "JAVA"){
+        console.log("hello world")
+        fileFormatter =  getJavaPOM();
+        console.log("hello world 2")
+        console.log(fileFormatter)
+      } else{
+        alert("language isn't supported for full POM yet")
+      }
+    }
+
+    navigator.clipboard.writeText(fileFormatter)
     .then(() => {
       console.log('Text copied to clipboard');
     })
