@@ -64,7 +64,8 @@
       // populate the popup with data
       populatePopup(promise);
     } else if (message.command === "elementCommand") {
-        console.log(message.content)
+      console.log("HELLO, inside of elementCommand in main.js")
+      console.log(message.content)
     }
   });
 

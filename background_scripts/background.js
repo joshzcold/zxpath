@@ -119,6 +119,7 @@ function handleMessage(request, sender, sendResponse) {
         .catch((e) => {console.log(e)})
   }
   else if (request.command === "elementCommand") {
+    console.log("HELLO, inside of elementCommand in background.js")
     sendElementPopoutCommand(request.content, request.command);
   }
 

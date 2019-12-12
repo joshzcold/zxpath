@@ -49,14 +49,21 @@ document.onclick = function (e) {
 //     // dropmenu.style.display = "hidden";
 // }
 
+function handleResponse(message) {
+    console.log("message received in element.js");
+}
+
+function handleError(error) {
+    console.log("error message sending in element.js");
+}
+
 document.addEventListener("click", (e) => {
-    console.log("HELLOW WORLD FROMelemnt.js")
-    let reponse = browser.runtime.sendMessage({
+    console.log("HELLO, inside of click event listener of element.js")
+    let response = browser.runtime.sendMessage({
         content: "message originating from element.js",
         command: "elementCommand"
-    })
+    });
 
-    // TODO: fix this response component
-    // response.then()
+    response.then(handleResponse, handleError);
 });
 })();
