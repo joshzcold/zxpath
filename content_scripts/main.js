@@ -82,9 +82,6 @@
       // This can happen if the user denies clipboard permissions:
       console.error('Could not copy text: ', err);
     });
-  
-
-    
   }
 
   /**
@@ -93,6 +90,7 @@
    */
   function openNewPageWithRawResults() {
     console.log("open new page with raw results")
+    // window.open('_blank');
   }
 
 
