@@ -106,10 +106,10 @@ function handleMessage(request, sender, sendResponse) {
       });
   }
 
-  let sendElementPopoutCommand = (contentArg, commandArg) => {
-    browserAppData.tabs.sendMessage({
-      content: contentArg,
-      command: commandArg
+  let sendElementPopoutCommand = (tabs) => {
+    browserAppData.tabs.sendMessage(tabs[0].id,{
+      command: request.command,
+      content: request.content + " through background.js"
     })
   }
 
@@ -120,7 +120,9 @@ function handleMessage(request, sender, sendResponse) {
   }
   else if (request.command === "elementCommand") {
     console.log("HELLO, inside of elementCommand in background.js")
-    sendElementPopoutCommand(request.content, request.command);
+    browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(sendElementPopoutCommand)
+        .catch((e) => {console.log(e)})
   }
 
   sendResponse({response: "Background sent event to main"});

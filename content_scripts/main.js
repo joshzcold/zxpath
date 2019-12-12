@@ -1,4 +1,4 @@
-(function() {
+(function () {
   if (window.hasRun) {
     return;
   }
@@ -59,8 +59,8 @@
    * either save the results to a file for download
    * or send the results to a new raw page
    */
-  function saveResultToFile(){
-    if(downloadOptions.downloadType === "raw"){
+  function saveResultToFile() {
+    if (downloadOptions.downloadType === "raw") {
       openNewPageWithRawResults()
     } else{
       let fileformatter = xpathObjects.reduce(getReducedString, "");
@@ -91,9 +91,10 @@
    * open a new blank page with just text of the results 
    * so users can just copy and paste what they want
    */
-  function openNewPageWithRawResults(){
+  function openNewPageWithRawResults() {
     console.log("open new page with raw results")
   }
+
 
   /**
    * Listening for main toolbar button presses
@@ -127,7 +128,8 @@
     }
   });
 
-  function elementFromCord(X,Y){
+
+  function elementFromCord(X, Y) {
     let element;
     if (typeof X === "number" && typeof Y === "number") {
       try {
@@ -147,27 +149,17 @@
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
     let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
-
-    // let url = browser.runtime.getURL("element-popout/element.html");
-    // let iframe = document.createElement("iframe");
-    // iframe.setAttribute("src", url);
-    // iframe.setAttribute("style", style);
-    // iframe.setAttribute("allowtransparency", "true");
-    // iframe.setAttribute("frameBorder", "0");
-    // iframe.setAttribute("scrolling", "no");
-    // iframe.setAttribute("id", "zxpath-iframe");
-
     let html = "<form>" +
-    "Element ID: " + id + "<input placeholder= 'Enter Element Name'></input><br>" +
-    "<p>Select Preffered Xpath</p>" + 
-    "<ol>";
+      "Element ID: " + id + "<input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
+      "<p>Select Preffered Xpath</p>" +
+      "<ol>";
 
     getXpaths().forEach(xpath => {
-      html += "<li>" + xpath + "</li>";
+      html += "<li id='zxpath-popup-selection' zxpathid="+id+">" + xpath + "</li>";
     });
-    
+
     html += "</ol>" +
-    "</form>";
+      "</form>";
 
     console.log(html);
     var div = document.createElement("div");
@@ -177,20 +169,35 @@
     document.getElementById("insertPopup").appendChild(div);
   }
 
-  function populatePopup(xpathDataPromise) {
-    console.log("placeZXPathPopup -> xpathDataPromise", xpathDataPromise);
-    xpathDataPromise.then(
-      function(result) {
-        console.log("result ->", result); // populate the popup
-        /**
-         * REED POPULATE WITH DATA HERE 😤
-         */
-      },
-      function(err) {
-        console.log(err); // Error: "It broke"
-      }
-    );
-  }
+  /**
+   * General lick and input listeners for click and input
+   */
+  document.addEventListener("click", (e) => {
+    if(e.target.id === "zxpath-popup-selection"){
+      let zxpathID = e.target.getAttribute("zxpathid")
+      console.log("this is the ID I got ->", zxpathID)
+
+      console.log("tis is the xpath im going to replace -> ",e.target.innerText)
+
+      let response = browser.runtime.sendMessage({
+        command: "elementCommand",
+        selectedXpath: e.target.textContent
+    });
+
+    response.then(handleResponse, handleError);
+    }
+   })
+
+   document.addEventListener("input", (e) => {
+    if(e.target.id === "zxpath-popup-input"){
+      let zxpathID = e.target.getAttribute("zxpathid")
+      console.log("this is the ID I got ->", zxpathID)
+
+      let inputName = e.target.value;
+      console.log("This is new xpath name value -> ", inputName);
+    }
+  })
+
 
   /**
    * @param {*} clickedElement
@@ -279,7 +286,7 @@
     return obj;
   }
 
-  /****** Language Output ******/ 
+  /****** Language Output ******/
 
   function generateWebElements(language, xpath) {
     let javaCodeArray = new Array();
@@ -326,12 +333,12 @@
 
   function setName(id, newName) {
     xpathObjects = xpathObjects.map(obj => {
-      if(obj.id === id) {
+      if (obj.id === id) {
         return { ...obj, name: name };
       }
-      else{
+      else {
         return obj
-      } 
+      }
     });
   }
 
