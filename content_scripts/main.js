@@ -259,32 +259,7 @@
     return obj;
   }
 
-  /**
-   * @param {*} objectIndex This will be which 'object' or element the user wants to swap xpath's for.
-   * @param {*} xpathIndex The index of the newly selected object that needs to replace 'topXpath'
-   *
-   * Change topXpath to the xpath the user would prefer.
-   */
-  function swapPrimaryXpath(topXpath, newXpath) {
-    xpathObjects = xpathObjects.map(obj => {
-      if (obj.topXpath == topXpath) {
-        return { ...obj, topXpath: newXpath };
-      } else {
-        return obj;
-      }
-    });
-  }
-
-  /**
-   * @param {*} index The index of the xpathObjects.
-   *
-   * If a user decides they don't want an element they can deselect it and we stop worrying about it.
-   */
-  function deselectElement(topXpath) {
-    xpathObjects = xpathObjects.filter(obj => {
-      return obj.topXpath !== topXpath;
-    });
-  }
+  /****** Language Output ******/ 
 
   function getXpaths() {
     return xpathObjects.map(obj => obj.topXpath);
@@ -331,5 +306,34 @@
       case "RUBY":
         return '<REPLACE_NAME>> = @driver.find_element(:xpath,"' + xpath + '")';
     }
+  }
+
+  /***** Utility Functions ******/
+
+  function swapPrimaryXpath(id, newXpath) {
+    xpathObjects = xpathObjects.map(obj => {
+      if (obj.id == id) {
+        return { ...obj, topXpath: newXpath };
+      } else {
+        return obj;
+      }
+    });
+  }
+
+  function setName(id, newName) {
+    xpathObjects = xpathObjects.map(obj => {
+      if(obj.id === id) {
+        return { ...obj, name: name };
+      }
+      else{
+        return obj
+      } 
+    });
+  }
+
+  function deselectElement(id) {
+    xpathObjects = xpathObjects.filter(obj => {
+      return obj.id !== id;
+    });
   }
 })();
