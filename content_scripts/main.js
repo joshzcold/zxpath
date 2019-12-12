@@ -61,26 +61,26 @@
    * or send the results to a new raw page
    */
   function saveResultToFile() {
-    if (downloadOptions.downloadType === "raw") {
-      openNewPageWithRawResults()
-    } else{
-      let fileFormatter
-      let resultOption = downloadOptions.result
-      let language = downloadOptions.language
-      console.log(downloadOptions)
-      if(resultOption === "XPATH"){
+    let fileFormatter
+    let resultOption = downloadOptions.result
+    let language = downloadOptions.language
+    console.log(downloadOptions)
+    if(resultOption === "XPATH"){
 
-      } else if (resultOption === "VAR"){
-        console.log("hellow orld")
-        fileFormatter =  xpathObjects.reduce(getReducedString, "");
-      } else if (resultOption === "POM"){
-        if(language === "JAVA"){
-          fileFormatter =  getJavaPOM() 
-        } else{
-          alert("language isn't supported for full POM yet")
-        }
+    } else if (resultOption === "VAR"){
+      console.log("hellow orld")
+      fileFormatter =  xpathObjects.reduce(getReducedString, "");
+    } else if (resultOption === "POM"){
+      if(language === "JAVA"){
+        fileFormatter =  getJavaPOM() 
+      } else{
+        alert("language isn't supported for full POM yet")
       }
+    }
 
+    if (downloadOptions.downloadType === "raw") {
+      openNewPageWithRawResults(fileFormatter)
+    } else{
       var blob = new Blob([fileFormatter], {type: "text/plain;charset=utf-8"});
       saveAs(blob, "page-results.txt");
     }
@@ -124,9 +124,8 @@
    * open a new blank page with just text of the results 
    * so users can just copy and paste what they want
    */
-  function openNewPageWithRawResults() {
-    console.log("open new page with raw results")
-    // window.open('_blank');
+  function openNewPageWithRawResults(result) {
+    alert(result)
   }
 
 
