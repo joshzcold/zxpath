@@ -313,6 +313,10 @@
 
   /****** Language Output ******/
 
+  function getXpaths() {
+    return xpathObjects.map(obj => obj.topXpath);
+  }
+
   function generateWebElements(language) {
     let javaCodeArray = new Array();
 
@@ -400,8 +404,6 @@
   }
 
   function getXpathList(id) {  
-    console.log(xpathObjects);
-    console.log(id);
     return xpathObjects.find(obj => obj.id === id).xpathList;
   }
 })();
