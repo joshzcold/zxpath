@@ -146,21 +146,21 @@
   function placePopup(element, X, Y, id) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
-    let html = "<form>" +
-      "Element ID: " + id + "<input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
-      "<p>Select Preffered Xpath</p>" +
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto; padding: 10px 10px 10px 10px; border-radius: 8px; box-shadow: 2px 2px 10px;";
+    let html = "<form id='zxpath-popup'><input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
+      "<p id='zxpath-popup-input'>Select Preffered Xpath</p>" +
+
       "<ol>";
 
-    getXpaths().forEach(xpath => {
+      getXpathList(id).forEach(xpath => {
       html += "<li id='zxpath-popup-selection' zxpathid="+id+">" + xpath + "</li>";
-    });
+      });
 
     html += "</ol>" +
       "</form>";
 
-    console.log(html);
     var div = document.createElement("div");
+    div.setAttribute("id", "zxpath-popup")
     div.innerHTML = html;
     div.style = style;
 
@@ -240,13 +240,7 @@
       let xpath =
         "//" + elementType + "[@" + att.attribute + " = '" + att.value + "']";
 
-      let results = document.evaluate(
-        xpath,
-        document,
-        null,
-        XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-        null
-      );
+      let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
       if (results.snapshotLength === 1) {
         xpathArray.push(xpath);
@@ -267,7 +261,7 @@
       obj = {
         id: id,
         name: "Enter_Name",
-        ttopXpath: xpathArray[0],
+        topXpath: xpathArray[0],
         xpathList: xpathArray,
         elementType: elementType
       };
@@ -338,5 +332,11 @@
     xpathObjects = xpathObjects.filter(obj => {
       return obj.id !== id;
     });
+  }
+
+  function getXpathList(id) {  
+    console.log(xpathObjects);
+    console.log(id);
+    return xpathObjects.find(obj => obj.id === id).xpathList;
   }
 })();
