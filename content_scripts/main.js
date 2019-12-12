@@ -45,19 +45,8 @@
     console.log("this is element outside of the promise", element);
 
     // place popup in dom
-    placePopup(element, message.element.X, message.element.Y);
-
-    // async call to get selector data
-    var promise = new Promise(function(resolve, reject) {
-      let result = getXpathData(element);
-      if (result !== null) {
-        resolve(result);
-      } else {
-        reject(Error(result));
-      }
-    });
-    // populate the popup with data
-    populatePopup(promise);
+    let result = getXpathData(element);
+    placePopup(element, message.element.X, message.element.Y, result.id);
   }
 
   /**
@@ -135,28 +124,38 @@
     return element;
   }
 
-  function placePopup(element, X, Y) {
+  function placePopup(element, X, Y, id) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let style =
-      "position: absolute; left: " +
-      newX +
-      "px; top: " +
-      newY +
-      "px; background:none transparent; width:auto;";
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto;";
 
-    let url = browser.runtime.getURL("element-popout/element.html");
-    let iframe = document.createElement("iframe");
-    iframe.setAttribute("src", url);
-    iframe.setAttribute("style", style);
-    iframe.setAttribute("allowtransparency", "true");
-    iframe.setAttribute("frameBorder", "0");
-    iframe.setAttribute("scrolling", "no");
-    iframe.setAttribute("id", "zxpath-iframe");
+    // let url = browser.runtime.getURL("element-popout/element.html");
+    // let iframe = document.createElement("iframe");
+    // iframe.setAttribute("src", url);
+    // iframe.setAttribute("style", style);
+    // iframe.setAttribute("allowtransparency", "true");
+    // iframe.setAttribute("frameBorder", "0");
+    // iframe.setAttribute("scrolling", "no");
+    // iframe.setAttribute("id", "zxpath-iframe");
 
+    let html = "<form>" +
+    "Element ID: " + id + "<input placeholder= 'Enter Element Name'></input><br>" +
+    "<p>Select Preffered Xpath</p>" + 
+    "<ol>";
+
+    getXpaths().forEach(xpath => {
+      html += "<li>" + xpath + "</li>";
+    });
+    
+    html += "</ol>" +
+    "</form>";
+
+    console.log(html);
     var div = document.createElement("div");
+    div.innerHTML = html;
+    div.style = style;
 
-    document.getElementById("insertPopup").appendChild(iframe);
+    document.getElementById("insertPopup").appendChild(div);
   }
 
   function populatePopup(xpathDataPromise) {
@@ -290,6 +289,10 @@
       case "RUBY":
         return (name + ' = @driver.find_element(:xpath,"' + xpath + '")');
     }
+  }
+
+  function getJavaPOM(name) {
+
   }
 
   /***** Utility Functions ******/
