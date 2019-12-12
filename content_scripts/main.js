@@ -34,7 +34,7 @@
 
   function getReducedString(acc, xpath) {
     console.log("Getting the xpaths passed to reduce");
-    return acc + getWebElementsByLanguage(languageChoice, xpath.topXpath) + " \n";
+    return acc + getWebElements(languageChoice, xpath.topXpath, xpath.name) + " \n";
   }
 
   function settingsNewPage() {
