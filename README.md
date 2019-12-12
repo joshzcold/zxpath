@@ -1,6 +1,13 @@
 # zxpath
 Get Ze-Xpath... get it?
 
+# Contributers
+- Joshua Cold -> joshua.cold@microfocus.com
+- Reed McFadden -> reed.mcfadden@microfocus.com
+- Rockwell Holbrook -> rockwell.holbrook@microfocus.com
+- Taylor Allred -> taylor.allred@microfocus.com
+- Zach Hall -> zachary.hall@microfocus.com
+
 ## Operations
 - highlight elements you want identifiers generated for
 - ZXpath will generate multiple identifiers per element and determine which would be best. You can choose which to pick per element
