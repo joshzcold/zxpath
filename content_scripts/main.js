@@ -28,13 +28,12 @@
   }
 
   function downloadPopup() {
-    let fileformatter = xpathObjects.reduce(getReducedString, "");
-    console.log(fileformatter);
-    // FileSaver
+    console.log(xpathObjects);
     notifyBackgroundPage();
   }
 
   function getReducedString(acc, xpath) {
+    console.log("Getting the xpaths passed to reduce");
     return acc + getWebElementsByLanguage(languageChoice, xpath.topXpath) + " \n";
   }
 
@@ -75,7 +74,9 @@
     if(downloadOptions.downloadType === "raw"){
       openNewPageWithRawResults()
     } else{
-      console.log("save results to file ")
+      let fileformatter = xpathObjects.reduce(getReducedString, "");
+      var blob = new Blob([fileformatter], {type: "text/plain;charset=utf-8"});
+      saveAs(blob, "page-results.txt");
     }
   }
 
@@ -83,7 +84,18 @@
    * copy results to clipboard 
    */
   function copyResultToClipBoard(){
-    console.log("copy results to clipboard")
+    let fileformatter = xpathObjects.reduce(getReducedString, "");
+    navigator.clipboard.writeText(fileformatter)
+    .then(() => {
+      console.log('Text copied to clipboard');
+    })
+    .catch(err => {
+      // This can happen if the user denies clipboard permissions:
+      console.error('Could not copy text: ', err);
+    });
+  
+
+    
   }
 
   /**
