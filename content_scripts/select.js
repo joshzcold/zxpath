@@ -81,7 +81,10 @@ var xPathFinder =
 
       setSelection(e){
         const node = e.target;
-        if (node.id !== this.selectionNode && node.id !== this.contentNode && node.id !== "zxpath-iframe") {
+        if (node.id !== this.selectionNode && node.id 
+          !== this.contentNode && node.id !== "zxpath-popup" &&
+          node.id !== "zxpath-popup-selection" &&
+          node.id !== "zxpath-popup-input") {
           const box = this.getNestedBoundingClientRect(node, this.win);
           const dimensions = this.getElementDimensions(node);
 
@@ -232,7 +235,11 @@ var xPathFinder =
 
       draw(e) {
         const node = e.target;
-        if (node.id !== this.selectionNode && node.id !== this.contentNode && node.id !== "zxpath-iframe") {
+        console.log(node.id)
+        if (node.id !== this.selectionNode && node.id 
+          !== this.contentNode && node.id !== "zxpath-popup" &&
+          node.id !== "zxpath-popup-selection" &&
+          node.id !== "zxpath-popup-input") {
           this.removeOverlay();
 
           const box = this.getNestedBoundingClientRect(node, this.win);

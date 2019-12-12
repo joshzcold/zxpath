@@ -148,10 +148,9 @@
   function placePopup(element, X, Y, id) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto; x-index: 100;";
-    let html = "<form>" +
-      "Element ID: " + id + "<input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
-      "<p>Select Preffered Xpath</p>" +
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto; padding: 10px 10px 10px 10px; border-radius: 8px; x-index: 100;";
+    let html = "<form id='zxpath-popup'><input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
+      "<p id='zxpath-popup-input'>Select Preffered Xpath</p>" +
       "<ol>";
 
       getXpathList(id).forEach(xpath => {
@@ -161,8 +160,8 @@
     html += "</ol>" +
       "</form>";
 
-    console.log(html);
     var div = document.createElement("div");
+    div.setAttribute("id", "zxpath-popup")
     div.innerHTML = html;
     div.style = style;
 
