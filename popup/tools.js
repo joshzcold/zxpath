@@ -203,9 +203,15 @@ function listenForClicks() {
 * Display the popup's error message, and hide the normal UI.
 */
 function reportExecuteScriptError(error) {
-  document.querySelector("#popup-content").classList.add("hidden");
-  document.querySelector("#error-content").classList.remove("hidden");
-  console.error(`Failed to execute beastify content script: ${error.message}`);
+  console.error(`error loading content script: ${error.message}`);
+}
+
+function startPopper(){
+  browserAppData.tabs.executeScript({ file: "/lib/popper.min.js" }).catch(reportExecuteScriptError);
+}
+
+function startBootStrap(){
+browserAppData.tabs.executeScript({ file: "/lib/bootstrap-4.4.1-dist/js/bootstrap.min.js" }).catch(reportExecuteScriptError);
 }
 
 /**
@@ -213,8 +219,11 @@ function reportExecuteScriptError(error) {
 * and add a click handler.
 * If we couldn't inject the script, handle the error.
 */
+browserAppData.tabs.executeScript({ file: "/lib/FileSaver.js" }).catch(reportExecuteScriptError);
+browserAppData.tabs.executeScript({ file: "/lib/jquery-3.4.1.min.js" }).then(startPopper).then(startBootStrap).catch(reportExecuteScriptError);
 browserAppData.tabs.executeScript({ file: "/content_scripts/main.js" })
   .then(listenForClicks)
   .catch(reportExecuteScriptError);
-
 browserAppData.tabs.executeScript({ file: "/content_scripts/select.js" }).catch(reportExecuteScriptError);
+
+

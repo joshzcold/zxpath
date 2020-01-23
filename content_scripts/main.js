@@ -184,18 +184,25 @@
   function placePopup(element, X, Y, id) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; background:white; width:auto; padding: 10px 10px 10px 10px; border-radius: 8px; box-shadow: 2px 2px 10px;";
-    let html = "<form id='zxpath-popup'><input id='zxpath-popup-input'  zxpathid="+id+" placeholder= 'Enter Element Name'></input><br>" +
-      "<p id='zxpath-popup-input'>Select Preffered Xpath</p>" +
+    let iconPath = browser.runtime.getURL("icons/popup_button.svg")
+    let html = `
+    <div class="dropdown">
+        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+          <img class="settings" src="${iconPath}"></img>
+        </button>
 
-      "<ol>";
+        <div id="dropdown-tooltip" class="dropdown-menu" role="menu">
+            <form class="list-group">
+                <input id="zxpath-popup-input" zxpathid=${id} placeholder='Enter Element Name' class="form-control form-control-sm" type="text" placeholder=".form-control-sm">
+                ${getXpathList(id).map(xpath => `<a class="list-group-item list-group-item-action" id='zxpath-popup-selection' zxpathid=${id} data-toggle="list">${xpath}</a>`)}
+            </form>
 
-      getXpathList(id).forEach(xpath => {
-      html += "<li id='zxpath-popup-selection' zxpathid="+id+">" + xpath + "</li>";
-      });
+        </div>
+    </div>
+    `
 
-    html += "</ol>" +
-      "</form>";
+    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; width:auto; z-index:999999;";
 
     var div = document.createElement("div");
     div.setAttribute("id", "zxpath-popup")

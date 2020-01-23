@@ -5,13 +5,17 @@
   "version": "1.0",
   "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/beastify",
 
-  "web_accessible_resources":["element-popup/*","popup/*"],
+  "web_accessible_resources":["icons/*"],
   "content_scripts": [
     {
+      "matches": ["*://*/*"],
       "all_frames": true,
-      "matches": ["<all_urls>"],
       "run_at": "document_start",
-      "js": ["popup/FileSaver.js", "content_scripts/select.js", "content_scripts/main.js", "element-popout/element.js"]
+      "css":
+      [
+        "lib/bootstrap-4.4.1-dist/css/bootstrap.min.css",
+        "element-popout/element.css"
+      ]
     }
   ],
   "background": {
@@ -25,5 +29,5 @@
     "default_title": "ZXpath",
     "default_popup": "popup/tools.html"
   },
-  "permissions": ["activeTab", "<all_urls>", "storage", "clipboardWrite"]
+  "permissions": ["activeTab", "tabs","<all_urls>", "storage", "clipboardWrite"]
 }
