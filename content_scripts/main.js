@@ -250,12 +250,15 @@
           <img class="settings" id="zxpath-popup-icon-x" src="${iconPath}"></img>
         </button>
 
-        <div id="dropdown-tooltip" class="dropdown-menu" role="menu">
-            <form class="list-group">
-                <input id="zxpath-popup-input" zxpathid=${id} placeholder='Enter Element Name' class="form-control form-control-sm" type="text" placeholder=".form-control-sm">
-                ${getXpathList(id).map(xpath => `<a class="list-group-item list-group-item-action" id='zxpath-popup-selection' zxpathid=${id} data-toggle="list">${xpath}</a>`)}
+
+        <div id="zxpath-dropdown-tooltip" class="dropdown-menu" role="menu">
+          <div id="zxpath-dropdown-container" class="zxpath-dropdown-menu" >
+                <input id="zxpath-popup-input" zxpathid=${id} placeholder='Enter Element Name' class="zxpath-popup-input form-control form-control-sm" type="text" placeholder=".form-control-sm">
+            <form class="list-group zxpath-list-group">
+                ${getXpathList(id).map(xpath => `<a class="zxpath-list-group-item list-group-item list-group-item-action" id='zxpath-popup-selection' zxpathid=${id} data-toggle="list">${xpath}</a>`)}
             </form>
 
+          </div>
         </div>
     </div>
     `
@@ -273,7 +276,7 @@
   }
 
   /**
-   * General lick and input listeners for click and input
+   * General click and input listeners for click and input
    */
   document.addEventListener("click", (e) => {
     if (e.target.id === "zxpath-popup-selection") {
