@@ -194,9 +194,10 @@
     let element;
     if (typeof X === "number" && typeof Y === "number") {
       try {
+        console.log("X Y in elementFromCord", X, Y)
         element = document.elementFromPoint(
-          X - window.pageXOffset,
-          Y - window.pageYOffset
+          X ,
+          Y 
         );
         console.log("getXpath element:  ", element);
       } catch (error) {
