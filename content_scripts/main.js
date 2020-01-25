@@ -5,6 +5,7 @@
   window.hasRun = true;
 
   let xpathObjects = new Array();
+  let selectionObjects = new Array();
 
   let downloadOptions = {
     downloadType: "raw",
@@ -48,12 +49,34 @@
    * @param {*} message
    */
   function executeGetXpath(message) {
+    console.log("what is message at executeGetXpath: ", message)
     let element = elementFromCord(message.element.X, message.element.Y);
-    console.log("this is element outside of the promise", element);
 
     // place popup in dom
-    let result = getXpathData(element);
-    placePopup(element, message.element.X, message.element.Y, result.id);
+    let result = getXpathData(element, message.element.selection);
+    console.log("result after getXpathData", result)
+    placePopup(element, message.element.X, message.element.Y, result.id, message);
+  }
+
+  function removeXpath(message){
+    console.log("what is the message in removeXpath: ", message)
+    // remove the read overlay on the element known as the "selection"
+    let selectedSelector = document.querySelector(`#xpath-selections > [id='${message.element.selection}']`);
+    selectedSelector.parentNode.removeChild(selectedSelector);
+
+    // Remove the pop near the element 
+    let selectedPopup = document.querySelector(`#insertPopup > [selection='${message.element.selection}']`);
+    selectedPopup.parentNode.removeChild(selectedPopup);
+    console.log("what is selectedPopup in removeXpath: ", selectedPopup)
+
+    // Remove the actual data from xpathObjects 
+    // this actually creates a new variable we will assign
+    let filtered = xpathObjects.filter(function(value, index, arr){
+      return value.selectionID !== message.element.selection
+    });
+    // Assigning xpathObjects to new array
+    xpathObjects = filtered
+    console.log("xpathObjects after filter remove : ", xpathObjects)
   }
 
   /**
@@ -139,6 +162,8 @@
       settingsNewPage();
     } else if (message.command === "getXpath") {
       executeGetXpath(message);
+    } else if (message.command === "removeXpath") {
+      removeXpath(message);
     } else if (message.command === "elementCommand") {
       console.log("HELLO, inside of elementCommand in main.js");
       console.log(message.content);
@@ -181,15 +206,51 @@
     return element;
   }
 
-  function placePopup(element, X, Y, id) {
+  function placePopup(element, X, Y, id, message) {
     let newX = X + window.pageXOffset;
     let newY = Y + window.pageYOffset;
-    let iconPath = browser.runtime.getURL("icons/popup_button.svg")
-    let html = `
-    <div class="dropdown">
-        <button class="btn btn-secondary" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+    console.log("what is element at placePopup?:", element)
+    console.log("number of found xpaths for this element", getXpathList(id).length)
+    if(getXpathList(id).length === 0){
+      console.log("element is null not placing the popup")
+
+      let html = `
+      <div class="alert alert-warning"  id="no-zxpath-alert" role="alert">
+        no xpath found
+      </div>
+      `
+      var div = document.createElement("div");
+      div.innerHTML = html;
+      let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; width:auto; z-index:999999;";
+      div.style = style;
+      div.setAttribute("id", "no-zxpath-alert-div")
+      document.getElementById("insertPopup").appendChild(div);
+
+      // Selecting the element in the dom so we can set zxpath to false
+      // this makes the extension believe the element isn't in the selected state
+      // when there is no valid xpath to store
+      console.log("what is message.element.selection: ", message.element.selection)
+      let selectedElement = document.querySelector(`[zxpath-id='${message.element.selection}']`);
+      selectedElement.setAttribute("zxpath","false")
+      console.log("what is selectedElement in placePopup? ", selectedElement)
+
+      // have the alert fade away after being presented
+      setTimeout(function(){$('.alert').fadeOut();}, 2000);
+
+      // remove the red selection on the element because no xpaths were
+      // found for the element
+      let selectionsOverlay = document.getElementById("xpath-selections")
+      let removeSelection = document.getElementById(message.element.selection)
+      selectionsOverlay.removeChild(removeSelection)
+
+    }else{
+      // have to use browser api to get svg stored in web_acessible_resources
+      let iconPath = browser.runtime.getURL("icons/popup_button.svg")
+      let html = `
+    <div class="dropdown" id="zxpath-popup" ">
+        <button class="btn btn-secondary" type="button" id="zxpath-popup-icon" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="true">
-          <img class="settings" src="${iconPath}"></img>
+          <img class="settings" id="zxpath-popup-icon-x" src="${iconPath}"></img>
         </button>
 
         <div id="dropdown-tooltip" class="dropdown-menu" role="menu">
@@ -202,14 +263,16 @@
     </div>
     `
 
-    let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; width:auto; z-index:999999;";
+      let style = "position: absolute; left: " + newX + "px; top: " + newY + "px; width:auto; z-index:999999;";
 
-    var div = document.createElement("div");
-    div.setAttribute("id", "zxpath-popup")
-    div.innerHTML = html;
-    div.style = style;
+      var div = document.createElement("div");
+      div.setAttribute("id", "zxpath-popup")
+      div.setAttribute("selection", message.element.selection)
+      div.innerHTML = html;
+      div.style = style;
 
-    document.getElementById("insertPopup").appendChild(div);
+      document.getElementById("insertPopup").appendChild(div);
+    }
   }
 
   /**
@@ -230,7 +293,7 @@
       let zxpathID = e.target.getAttribute("zxpathid")
       console.log("this is the ID I got ->", zxpathID)
       let inputName = e.target.value;
-      setName(parseInt(zxpathID), inputName)
+      setName(zxpathID, inputName)
       console.log("xpathObjects after change -> ", xpathObjects)
     }
   })
@@ -241,7 +304,7 @@
    *
    * Returns an array of valid Xpaths for the clickedElement
    */
-  function getXpathData(element) {
+  function getXpathData(element, selectionID) {
 
     let dataArray = new Array();
     const acceptable = [
@@ -270,7 +333,7 @@
       }
     });
 
-    return validateXpathData(dataArray, element.nodeName);
+    return validateXpathData(dataArray, element.nodeName, selectionID);
   }
 
   /**
@@ -279,7 +342,7 @@
    *
    * Called by getByData() in order to validate xpaths.
    */
-  function validateXpathData(dataArray, elementType) {
+  function validateXpathData(dataArray, elementType, selectionID) {
     let xpathArray = new Array();
     dataArray.forEach(att => {
       let xpath =
@@ -293,14 +356,18 @@
     });
 
     let obj;
-    let id = Math.floor(10000000 + Math.random() * 90000000);
+    let id = uuidv4()
+
+    console.log("what is the xpath object id?: ", id)
+
     if (xpathArray.length === 0) {
       obj = {
         id: id,
         name: "Enter_Name",
         topXpath: "NO VALID XPATH",
         xpathList: xpathArray,
-        elementType: elementType.toLowerCase()
+        elementType: elementType.toLowerCase(),
+        selectionID: selectionID
       };
     } else {
       obj = {
@@ -308,11 +375,12 @@
         name: "Enter_Name",
         topXpath: xpathArray[0],
         xpathList: xpathArray,
-        elementType: elementType.toLowerCase()
+        elementType: elementType.toLowerCase(),
+        selectionID: selectionID
       };
+      xpathObjects.push(obj);
     }
 
-    xpathObjects.push(obj);
     console.log("validateXpathData -> xpathObjects: ", xpathObjects);
     return obj;
   }
@@ -323,6 +391,14 @@
     let values = xpathObjects.map(obj => obj.topXpath);
     return values.join('\n')
   }
+
+  function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
+
 
   function generateWebElements(language) {
     let javaCodeArray = new Array();
@@ -411,6 +487,12 @@
   }
 
   function getXpathList(id) {  
-    return xpathObjects.find(obj => obj.id === id).xpathList;
+    let result = xpathObjects.find(obj => obj.id === id)
+    if(result === undefined){
+      result = {
+        xpathList: []
+      }
+    }
+    return result.xpathList 
   }
 })();

@@ -97,7 +97,7 @@ const browserAppData = this.browser || this.chrome;
 //  });
 
 function handleMessage(request, sender, sendResponse) {
-  console.log("Message from the content script: " + request);
+  console.log("Message from the content script: " + request.command);
   
   let sendGetXPathCommand = (tabs) => {
      browserAppData.tabs.sendMessage(tabs[0].id, {
@@ -113,7 +113,15 @@ function handleMessage(request, sender, sendResponse) {
     })
   }
 
+    let sendRemoveXpathCommand = (tabs) => {
+    browserAppData.tabs.sendMessage(tabs[0].id,{
+      command: request.command,
+      element: request
+    })
+  }
+
   if(request.command === "getXpath"){
+    console.log("HELLO, inside of getXpath in background.js")
     browserAppData.tabs.query({ active: true, currentWindow: true })
         .then(sendGetXPathCommand)
         .catch((e) => {console.log(e)})
@@ -124,8 +132,13 @@ function handleMessage(request, sender, sendResponse) {
         .then(sendElementPopoutCommand)
         .catch((e) => {console.log(e)})
   }
-
-  sendResponse({response: "Background sent event to main"});
+  else if (request.command === "removeXpath") {
+    console.log("HELLO, inside of removeXpath in background.js")
+    browserAppData.tabs.query({ active: true, currentWindow: true })
+        .then(sendRemoveXpathCommand)
+        .catch((e) => {console.log(e)})
+  }
+  sendResponse({response: "Background sent event to content scripts"});
 }
 
 browser.runtime.onMessage.addListener(handleMessage);

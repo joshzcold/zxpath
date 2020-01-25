@@ -1,3 +1,12 @@
+
+
+function uuidv4() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return v.toString(16);
+  });
+}
+
 /* globals chrome */
 var xPathFinder =
   xPathFinder ||
@@ -32,59 +41,52 @@ var xPathFinder =
           console.log(`Error: ${error}`);
         };
 
-        let sendElement = browser.runtime.sendMessage({
-          X: e.x,
-          Y: e.y,
-          command: "getXpath"
-        });
 
-        let removeElement = browser.runtime.sendMessage({
-          X: e.x,
-          Y: e.y,
-          command: "removeXpath"
-        });
 
         if (e.target.id !== this.contentNode) {
           console.log("you clicked on -> ", e);
           if (e.target.getAttribute("zxpath") === "true") {
+            // REMOVE FROM SELECTION
+            // //////////////////////
+            let selectionID = e.target.getAttribute("zxpath-id")
+            console.log("i found this zxpathid from the element: ", selectionID)
+            let removeElement = browser.runtime.sendMessage({
+              X: e.x,
+              Y: e.y,
+              command: "removeXpath",
+              selection: selectionID
+            });
+
+            console.log("removing element from Xpath")
             e.target.setAttribute("zxpath", "false");
             // remove element from global
             removeElement.then(handleResponse, handleError);
-            this.removeSelection(e)
           } else {
+            // ADD TO SELECTION
+            // ///////////////////////
+            let selectionID = uuidv4()
+            this.setSelection(e, selectionID)
+            console.log("this is selectionID: ", selectionID)
+            let sendElement = browser.runtime.sendMessage({
+              X: e.x,
+              Y: e.y,
+              command: "getXpath",
+              selection: selectionID
+            });
+
+            console.log("sending element to getXpath")
             e.target.setAttribute("zxpath", "true");
+            e.target.setAttribute("zxpath-id", selectionID)
             // Add element to global
             sendElement.then(handleResponse, handleError);
-            this.setSelection(e)
           }
         }
       }
 
-      removeSelection(e){
-        let xCord = e.x
-        let yCord = e.y
-
-        let element
-        if (typeof xCord === "number" && typeof yCord === "number") {
-        try {
-        element = document.elementFromPoint(
-          xCord - window.pageXOffset,
-          yCord - window.pageYOffset
-        );
-        console.log("remove from xpath selections:  ", element);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    return element;
-      }
-
-      setSelection(e){
+      setSelection(e, selectionID){
         const node = e.target;
         if (node.id !== this.selectionNode && node.id 
-          !== this.contentNode && node.id !== "zxpath-popup" &&
-          node.id !== "zxpath-popup-selection" &&
-          node.id !== "zxpath-popup-input") {
+          !== this.contentNode && !node.id.includes("zxpath")) {
           const box = this.getNestedBoundingClientRect(node, this.win);
           const dimensions = this.getElementDimensions(node);
 
@@ -108,32 +110,38 @@ var xPathFinder =
             pointerEvents: "none",
             position: "absolute"
           });
-          
+
           this.boxWrap(dimensions, "margin", selectionNode);
           this.boxWrap(dimensions, "border", selectionBorder);
           this.boxWrap(dimensions, "padding", selectionPadding);
 
           Object.assign(selectionContent.style, {
             height:
-              box.height -
-              dimensions.borderTop -
-              dimensions.borderBottom -
-              dimensions.paddingTop -
-              dimensions.paddingBottom +
-              "px",
+            box.height -
+            dimensions.borderTop -
+            dimensions.borderBottom -
+            dimensions.paddingTop -
+            dimensions.paddingBottom +
+            "px",
             width:
-              box.width -
-              dimensions.borderLeft -
-              dimensions.borderRight -
-              dimensions.paddingLeft -
-              dimensions.paddingRight +
-              "px"
+            box.width -
+            dimensions.borderLeft -
+            dimensions.borderRight -
+            dimensions.paddingLeft -
+            dimensions.paddingRight +
+            "px"
           });
 
           Object.assign(selectionNode.style, {
             top: box.top - dimensions.marginTop + window.pageYOffset + "px",
             left: box.left - dimensions.marginLeft + window.pageXOffset + "px"
           });
+
+
+          selectionNode.id = selectionID
+          selectionNode.style.zIndex = 999998
+
+          console.log("what is slection.id", selectionNode.id)
 
           this.selection.appendChild(selectionNode);
           selectionNode.appendChild(selectionBorder);
@@ -235,11 +243,8 @@ var xPathFinder =
 
       draw(e) {
         const node = e.target;
-        console.log(node.id)
         if (node.id !== this.selectionNode && node.id 
-          !== this.contentNode && node.id !== "zxpath-popup" &&
-          node.id !== "zxpath-popup-selection" &&
-          node.id !== "zxpath-popup-input") {
+          !== this.contentNode && !node.id.includes("zxpath") ) {
           this.removeOverlay();
 
           const box = this.getNestedBoundingClientRect(node, this.win);
@@ -251,19 +256,19 @@ var xPathFinder =
 
           Object.assign(this.content.style, {
             height:
-              box.height -
-              dimensions.borderTop -
-              dimensions.borderBottom -
-              dimensions.paddingTop -
-              dimensions.paddingBottom +
-              "px",
+            box.height -
+            dimensions.borderTop -
+            dimensions.borderBottom -
+            dimensions.paddingTop -
+            dimensions.paddingBottom +
+            "px",
             width:
-              box.width -
-              dimensions.borderLeft -
-              dimensions.borderRight -
-              dimensions.paddingLeft -
-              dimensions.paddingRight +
-              "px"
+            box.width -
+            dimensions.borderLeft -
+            dimensions.borderRight -
+            dimensions.paddingLeft -
+            dimensions.paddingRight +
+            "px"
           });
 
           Object.assign(this.node.style, {
@@ -336,8 +341,8 @@ var xPathFinder =
           const prefix = nodeElem.prefix ? nodeElem.prefix + ":" : "";
           const nth =
             nbOfPreviousSiblings || hasNextSiblings
-              ? `[${nbOfPreviousSiblings + 1}]`
-              : "";
+            ? `[${nbOfPreviousSiblings + 1}]`
+            : "";
           parts.push(prefix + nodeElem.localName + nth);
           nodeElem = nodeElem.parentNode;
         }
