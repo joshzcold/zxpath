@@ -15,6 +15,7 @@ function listenForClicks() {
       browserAppData.tabs.sendMessage(tabs[0].id, {
         command: "select",
       });
+      window.close()
     }
 
     function sendSettingsCommand(tabs) {
