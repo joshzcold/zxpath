@@ -28,9 +28,11 @@ var xPathFinder =
 
       getData(e){
         // TODO handle absolute positioning with scroll offset 
+        if(!e.target.id.includes("zxpath")){
         e.stopImmediatePropagation();
         e.preventDefault && e.preventDefault();
         e.stopPropagation && e.stopPropagation();
+        }
         let handleResponse = message => {
           console.log(
             `Message from the background script:  ${message.response}`
@@ -64,27 +66,35 @@ var xPathFinder =
           } else {
             // ADD TO SELECTION
             // ///////////////////////
-            let selectionID = uuidv4()
-            this.setSelection(e, selectionID)
-            console.log("this is selectionID: ", selectionID)
-            let sendElement = browser.runtime.sendMessage({
-              X: e.x,
-              Y: e.y,
-              command: "getXpath",
-              selection: selectionID
-            });
 
-            console.log("sending element to getXpath")
-            e.target.setAttribute("zxpath", "true");
-            e.target.setAttribute("zxpath-id", selectionID)
-            // Add element to global
-            sendElement.then(handleResponse, handleError);
+            // Don't place the popup if element is a zxpath element
+            if(!e.target.id.includes("zxpath")){
+
+              let selectionID = uuidv4()
+              this.setSelection(e, selectionID)
+              console.log("this is selectionID: ", selectionID)
+              // send message to background.js to place popup and get data
+              let sendElement = browser.runtime.sendMessage({
+                X: e.x,
+                Y: e.y,
+                command: "getXpath",
+                selection: selectionID
+              });
+
+              console.log("sending element to getXpath")
+              e.target.setAttribute("zxpath", "true");
+              e.target.setAttribute("zxpath-id", selectionID)
+              // Add element to global
+              sendElement.then(handleResponse, handleError);
+            }
           }
         }
       }
 
       setSelection(e, selectionID){
         const node = e.target;
+        console.log("does node.id include zxpath?: ", node.id.includes("zxpath"))
+
         if (node.id !== this.selectionNode && node.id 
           !== this.contentNode && !node.id.includes("zxpath")) {
           const box = this.getNestedBoundingClientRect(node, this.win);
@@ -217,8 +227,22 @@ var xPathFinder =
         this.container.style.zIndex = 10000000;
         this.node.style.zIndex = 10000000;
 
+      let iconPath = browser.runtime.getURL("icons/close.svg")
+        let closeSelectorButton = `
+          <div class="zxpath-close-selector" id="zxpath-close-selector-div">
+          <button  type="button" class="btn btn-danger zxpath-close-selector-button" id="zxpath-close-selector-button">
+          <p class="zxpath-close-selector-text" id="zxpath-close-selector-text">Close Selector</p>
+          <img class="zxpath-close-icon" id="zxpath-close-selector-icon" src="${iconPath}"></img>
+          </button>
+          </div>
+        `
+      var closeSelector = document.createElement("div");
+      closeSelector.setAttribute("id", "zxpath-close-selector")
+      closeSelector.innerHTML = closeSelectorButton;
+
         this.selection.appendChild(this.node);
         this.container.appendChild(this.node);
+        this.container.appendChild(closeSelector);
         this.node.appendChild(this.border);
         this.border.appendChild(this.padding);
         this.padding.appendChild(this.content);
@@ -467,5 +491,10 @@ var xPathFinder =
       }
     };
 
+    document.addEventListener("click", (e) => {
+      if (e.target.id.includes("zxpath-close-selector")) {
+      inspect.deactivate();
+    }
+  })
     return true;
   })();

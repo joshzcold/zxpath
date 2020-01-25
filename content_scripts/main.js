@@ -5,7 +5,6 @@
   window.hasRun = true;
 
   let xpathObjects = new Array();
-  let selectionObjects = new Array();
 
   let downloadOptions = {
     downloadType: "raw",
@@ -71,7 +70,7 @@
 
     // Remove the actual data from xpathObjects 
     // this actually creates a new variable we will assign
-    let filtered = xpathObjects.filter(function(value, index, arr){
+    let filtered = xpathObjects.filter(function(value){
       return value.selectionID !== message.element.selection
     });
     // Assigning xpathObjects to new array
@@ -195,10 +194,7 @@
     if (typeof X === "number" && typeof Y === "number") {
       try {
         console.log("X Y in elementFromCord", X, Y)
-        element = document.elementFromPoint(
-          X ,
-          Y 
-        );
+        element = document.elementFromPoint(X,Y);
         console.log("getXpath element:  ", element);
       } catch (error) {
         console.error(error);
@@ -478,12 +474,6 @@
       else {
         return obj
       }
-    });
-  }
-
-  function deselectElement(id) {
-    xpathObjects = xpathObjects.filter(obj => {
-      return obj.id !== id;
     });
   }
 
