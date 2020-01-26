@@ -251,7 +251,7 @@
         </button>
 
 
-        <div id="zxpath-dropdown-tooltip" class="dropdown-menu" role="menu">
+        <div id="zxpath-dropdown-tooltip" class="dropdown-menu" style="z-index: 9999999;"role="menu">
           <div id="zxpath-dropdown-container" class="zxpath-dropdown-menu" >
                 <input id="zxpath-popup-input" zxpathid=${id} placeholder='Enter Element Name' class="zxpath-popup-input form-control form-control-sm" type="text" placeholder=".form-control-sm">
             <form class="list-group zxpath-list-group">
@@ -308,32 +308,40 @@
 
     let dataArray = new Array();
     const acceptable = [
-      "id",
-      "name",
-      "alt",
-      "value",
-      "title",
-      "src",
-      "background",
-      "cite",
-      "color",
-      "data",
-      "href",
-      "label",
-      "list",
-      "pattern",
-      "placeholder",
-      "poster",
-      "baseuri"
+      getXpathAttribute(element,"id"),
+      getXpathAttribute(element,"name"),
+      getXpathAttribute(element,"alt"),
+      getXpathAttribute(element,"value"),
+      getXpathAttribute(element,"title"),
+      getXpathAttribute(element,"src"),
+      getXpathAttribute(element,"background"),
+      getXpathAttribute(element,"cite"),
+      getXpathAttribute(element,"color"),
+      getXpathAttribute(element,"data"),
+      getXpathAttribute(element,"href"),
+      getXpathAttribute(element,"label"),
+      getXpathAttribute(element,"list"),
+      getXpathAttribute(element,"pattern"),
+      getXpathAttribute(element,"placeholder"),
+      getXpathAttribute(element,"poster"),
+      getXpathAttribute(element,"baseuri")
     ];
 
-    acceptable.forEach(att => {
-      if (element.hasAttribute(att)) {
-        dataArray.push({ attribute: att, value: element.getAttribute(att) });
-      }
+    acceptable.forEach(value => {
+      console.log("value from accptable array",value)
+      dataArray.push(value);
     });
 
     return validateXpathData(dataArray, element.nodeName, selectionID);
+  }
+
+  function getXpathAttribute(element, attribute){
+    // getAttribute is best effort and will return null, but thats okay because we will 
+    // validate it in a later function called validateXpathData
+    let value = element.getAttribute(attribute)
+      let xpath =
+        "//" + element.nodeName.toLowerCase() + "[@" + attribute + " = '" + value + "']";
+    return xpath
   }
 
   /**
@@ -344,9 +352,7 @@
    */
   function validateXpathData(dataArray, elementType, selectionID) {
     let xpathArray = new Array();
-    dataArray.forEach(att => {
-      let xpath =
-        "//" + elementType.toLowerCase() + "[@" + att.attribute + " = '" + att.value + "']";
+    dataArray.forEach(xpath => {
 
       let results = document.evaluate(xpath, document, null, XPathResult.ORDERED_NODE_SNAPSHOT_TYPE, null);
 
