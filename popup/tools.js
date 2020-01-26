@@ -22,6 +22,9 @@ function listenForClicks() {
       browserAppData.tabs.sendMessage(tabs[0].id, {
         command: "settings",
       });
+      alert(`settings to come in a future version of ZXPath
+      thank you for using the extension`)
+
     }
 
     function changeDownloadSetting(tabs){
