@@ -1,5 +1,5 @@
 # zxpath
-Get Ze-Xpath... get it?
+Get Ze-Xpath
 
 # Contributers
 - Joshua Cold -> joshuajcold@outlook.com
@@ -15,3 +15,8 @@ Get Ze-Xpath... get it?
 # Example
 ![ZXpath design](/docs/ZXpath-Design.png)
 
+# Goals
+[] Xpath generation for parent/sibling/child/etc.
+[] Settings page for customizations
+[] Raw save option opening new tab with page just with output text
+[] Every language fully supported (missing javascript, perl POM)
