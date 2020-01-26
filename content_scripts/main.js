@@ -461,7 +461,7 @@
     let pom = "class ClassName\n\n" +
       "  # Element Variables\n"
 
-      generateWebElements("PYTHON").forEach(element => {
+      generateWebElements("RUBY").forEach(element => {
       pom += "  " + element + "\n";
       });
     
