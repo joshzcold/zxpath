@@ -12,7 +12,7 @@ Get Ze-Xpath
 - ZXPath will verify elements are A. unquie on the page B. Are valid selectors
 - ZXPath will generate methods for clicking, sending text, clearing for each element where applicable
 
-# Example
+# Picture
 ![ZXpath design](/docs/ZXpath-Design.png)
 
 # Goals
