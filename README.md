@@ -13,7 +13,7 @@ Get Ze-Xpath
 - ZXPath will generate methods for clicking, sending text, clearing for each element where applicable
 
 # Picture
-![ZXpath design](/docs/ZXpath-Design.png)
+![ZXpath example picture](/docs/img/example.png)
 
 # Goals
 - [ ] Xpath generation for parent/sibling/child/etc.
