@@ -95,6 +95,8 @@
     } else if (resultOption === "POM"){
       if(language === "JAVA"){
         fileFormatter =  getJavaPOM() 
+      } else if(language === "PYTHON"){
+        fileFormatter = getPythonPOM()
       } else{
         alert("language isn't supported for full POM yet")
       }
@@ -123,10 +125,9 @@
       fileFormatter =  xpathObjects.reduce(getReducedString, "");
     } else if (resultOption === "POM"){
       if(language === "JAVA"){
-        console.log("hello world")
         fileFormatter =  getJavaPOM();
-        console.log("hello world 2")
-        console.log(fileFormatter)
+      } else if(language === "PYTHON"){
+        fileFormatter = getPythonPOM()
       } else{
         alert("language isn't supported for full POM yet")
       }
@@ -342,7 +343,7 @@
 
   function getXpathInnerText(element){
     let value = element.innerText
-    let xpath = '//' + element.nodeName.toLowerCase() + `[text() = "${value}"]`
+    let xpath = '//' + element.nodeName.toLowerCase() + `[text() = '${value}']`
     return xpath
   }
 
@@ -444,6 +445,34 @@
     }
   }
 
+  function getPythonPOM(){
+    let pom = "class ClassName():\n\n" +
+      "   # Element Variables\n"
+
+      generateWebElements("PYTHON").forEach(element => {
+      pom += "    " + element + "\n";
+      });
+    
+      pom += "\n  # Function Calls\n";
+
+    xpathObjects.forEach(obj => {
+      if(obj.elementType === "button" || obj.elementType === "a") {
+        pom+= "    def click" + obj.name + "Button(): \n" +
+        "        " + obj.name + ".click();\n" +
+        "\n\n"
+      }
+
+      else if(obj.elementType === "input") {
+        pom+= "    def set" + obj.name + "Field(value): \n" +
+        "        " + obj.name + ".clear();\n" +
+        "        " + obj.name + ".sendKeys(value);\n" +
+        "\n\n"
+      }
+    });
+
+    return pom
+  }
+
   function getJavaPOM() {
     let pom = "private class ClassName {\n\n" +
 
@@ -470,6 +499,7 @@
     });
 
     pom += "}";
+
 
     return pom
   }
