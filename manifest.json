@@ -1,9 +1,9 @@
 {
-  "description": "Adds a browser action icon to the toolbar. Click the button to choose a beast. The active tab's body content is then replaced with a picture of the chosen beast. See https://developer.mozilla.org/en-US/Add-ons/WebExtensions/Examples#beastify",
+  "description": "like other xpath extension but with the purpose of generating usable web driver code for your preferred language",
   "manifest_version": 2,
   "name": "ZXPath",
   "version": "1.0",
-  "homepage_url": "https://github.com/mdn/webextensions-examples/tree/master/beastify",
+  "homepage_url": "https://github.com/joshzcold/zxpath",
 
   "web_accessible_resources":["icons/*"],
   "content_scripts": [
