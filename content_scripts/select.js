@@ -8,6 +8,7 @@ function uuidv4() {
 }
 
 /* globals chrome */
+const browserAppData = this.browser || this.chrome;
 var xPathFinder =
   xPathFinder ||
   (() => {
@@ -52,7 +53,7 @@ var xPathFinder =
             // //////////////////////
             let selectionID = e.target.getAttribute("zxpath-id")
             console.log("i found this zxpathid from the element: ", selectionID)
-            let removeElement = browser.runtime.sendMessage({
+            let removeElement = browserAppData.runtime.sendMessage({
               X: e.x,
               Y: e.y,
               command: "removeXpath",
@@ -74,7 +75,7 @@ var xPathFinder =
               this.setSelection(e, selectionID)
               console.log("this is selectionID: ", selectionID)
               // send message to background.js to place popup and get data
-              let sendElement = browser.runtime.sendMessage({
+              let sendElement = browserAppData.runtime.sendMessage({
                 X: e.x,
                 Y: e.y,
                 command: "getXpath",
@@ -227,7 +228,7 @@ var xPathFinder =
         this.container.style.zIndex = 10000000;
         this.node.style.zIndex = 10000000;
 
-      let iconPath = browser.runtime.getURL("icons/close.svg")
+      let iconPath = browserAppData.runtime.getURL("icons/close.svg")
         let closeSelectorButton = `
           <div class="zxpath-close-selector" id="zxpath-close-selector-div">
           <button  type="button" class="btn btn-danger zxpath-close-selector-button" id="zxpath-close-selector-button">

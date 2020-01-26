@@ -9,196 +9,179 @@ let downloadMessage
 */
 function listenForClicks() {
   document.addEventListener("click", (e) => {
-
-
-    function sendSelectCommand(tabs) {
-      browserAppData.tabs.sendMessage(tabs[0].id, {
-        command: "select",
-      });
-      window.close()
-    }
-
-    function sendSettingsCommand(tabs) {
-      browserAppData.tabs.sendMessage(tabs[0].id, {
-        command: "settings",
-      });
-      alert(`settings to come in a future version of ZXPath
-      thank you for using the extension`)
-
-    }
-
-    function changeDownloadSetting(tabs){
-      console.log(tabs)
-      console.log(downloadMessage)
-      browserAppData.tabs.sendMessage(tabs[0].id, downloadMessage);
-    }
-
-    function saveToFileCommand(tabs){
-      console.log(tabs)
-      console.log(downloadMessage)
-      browserAppData.tabs.sendMessage(tabs[0].id, {
-        command: "saveToFile"
-      });
-    }
-
-    function copyToClipBoardCommand(tabs){
-      console.log(tabs)
-      console.log(downloadMessage)
-      browserAppData.tabs.sendMessage(tabs[0].id, {
-        command: "copyToClipBoard"
-      });
-    }
-
-    function reportError(error) {
-      console.error(`Could not execute: ${error}`);
-    }
-
     /**
      * Parse click result from listener in popup
      * specifically looking for elements in tools.html
      */
     if (e.target.classList.contains("select")) {
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(sendSelectCommand)
-        .catch(reportError);
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
+            command: "select"
+          });
+          window.close();
+        });
+      })
     } 
 
     if (e.target.classList.contains("settings")) {
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(sendSettingsCommand)
-        .catch(reportError);
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
+            command: "settings"
+          });
+        });
+      })
     } 
 
     if(e.target.id === "downloadTypeRaw"){
       console.log("downloadTypeRaw")
-       downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         downloadType: "raw"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
 
     if(e.target.id === "downloadTypeFile"){
       console.log("downloadTypeFile")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         downloadType: "file"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
 
     if(e.target.id === "resultTypeRaw"){
       console.log("resultTypeRaw")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         result: "XPATH"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
 
     if(e.target.id === "resultTypeVariables"){
       console.log("resultTypeVariables")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         result: "VAR"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
 
     if(e.target.id === "resultTypePom"){
       console.log("resultTypePom")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         result: "POM"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
 
     if(e.target.id === "programLanguageJava"){
       console.log("programLanguageJava")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "JAVA"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
     if(e.target.id === "programLanguagePython"){
       console.log("programLanguagePython")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "PYTHON"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
 
     if(e.target.id === "programLanguageCSharp"){
       console.log("programLanguageCSharp")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "C#"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
     if(e.target.id === "programLanguagePHP"){
       console.log("programLanguagePHP")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "PHP"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
     if(e.target.id === "programLanguagePerl"){
       console.log("programLanguagePerl")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "PERL"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
     if(e.target.id === "programLanguageRuby"){
       console.log("programLanguageRuby")
-      downloadMessage = {
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "RUBY"
-      }
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(changeDownloadSetting)
-        .catch(reportError);
+          });
+        });
+      })
     }
     
     if(e.target.id === "saveToFileButton"){
       console.log("saveToFileButton")
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(saveToFileCommand)
-        .catch(reportError);
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
+            command: "saveToFile"
+          });
+        });
+      })
     }
     if(e.target.id === "copyToClipBoardButton"){
       console.log("copyToClipBoardButton")
-      browserAppData.tabs.query({ active: true, currentWindow: true })
-        .then(copyToClipBoardCommand)
-        .catch(reportError);
+      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+        result.forEach(function(tab) {
+          browserAppData.tabs.sendMessage(tab.id, {
+            command: "copyToClipBoard"
+          });
+        });
+      })
     }
-
   });
 }
 
@@ -211,11 +194,11 @@ function reportExecuteScriptError(error) {
 }
 
 function startPopper(){
-  browserAppData.tabs.executeScript({ file: "/lib/popper.min.js" }).catch(reportExecuteScriptError);
+  browserAppData.tabs.executeScript({ file: "/lib/popper.min.js" })
 }
 
 function startBootStrap(){
-browserAppData.tabs.executeScript({ file: "/lib/bootstrap-4.4.1-dist/js/bootstrap.min.js" }).catch(reportExecuteScriptError);
+browserAppData.tabs.executeScript({ file: "/lib/bootstrap-4.4.1-dist/js/bootstrap.min.js" })
 }
 
 /**
@@ -223,11 +206,12 @@ browserAppData.tabs.executeScript({ file: "/lib/bootstrap-4.4.1-dist/js/bootstra
 * and add a click handler.
 * If we couldn't inject the script, handle the error.
 */
-browserAppData.tabs.executeScript({ file: "/lib/FileSaver.js" }).catch(reportExecuteScriptError);
-browserAppData.tabs.executeScript({ file: "/lib/jquery-3.4.1.min.js" }).then(startPopper).then(startBootStrap).catch(reportExecuteScriptError);
+browserAppData.tabs.executeScript({ file: "/lib/FileSaver.js" })
+browserAppData.tabs.executeScript({ file: "/lib/jquery-3.4.1.min.js" })
+startPopper()
+startBootStrap()
 browserAppData.tabs.executeScript({ file: "/content_scripts/main.js" })
-  .then(listenForClicks)
-  .catch(reportExecuteScriptError);
-browserAppData.tabs.executeScript({ file: "/content_scripts/select.js" }).catch(reportExecuteScriptError);
+browserAppData.tabs.executeScript({ file: "/content_scripts/select.js" })
+listenForClicks()
 
 
