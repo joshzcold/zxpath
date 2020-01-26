@@ -95,6 +95,8 @@
     } else if (resultOption === "POM"){
       if(language === "JAVA"){
         fileFormatter =  getJavaPOM() 
+      } else if(language === "C#"){
+        fileFormatter = getCSharpPOM()
       } else if(language === "PYTHON"){
         fileFormatter = getPythonPOM()
       } else{
@@ -126,7 +128,9 @@
     } else if (resultOption === "POM"){
       if(language === "JAVA"){
         fileFormatter =  getJavaPOM();
-      } else if(language === "PYTHON"){
+      }else if(language === "C#"){
+        fileFormatter = getCSharpPOM()
+      }else if(language === "PYTHON"){
         fileFormatter = getPythonPOM()
       } else{
         alert("language isn't supported for full POM yet")
@@ -469,6 +473,37 @@
         "\n\n"
       }
     });
+
+    return pom
+  }
+
+  function getCSharpPOM() {
+    let pom = "public class ClassName {\n\n" +
+
+      "  // Element Variables  \n";
+    generateWebElements("C#").forEach(element => {
+      pom += "  " + element + "\n";
+    });
+
+    pom += "\n  // Function Calls  \n";
+
+    xpathObjects.forEach(obj => {
+      if(obj.elementType === "button" || obj.elementType === "a") {
+        pom+= "  public void click" + obj.name + "Button() {\n" +
+        "  " + obj.name + ".click();\n" +
+        "  }\n\n"
+      }
+
+      else if(obj.elementType === "input") {
+        pom+= "  public void set" + obj.name + "Field(String value) {\n" +
+        "  " + obj.name + ".clear();\n" +
+        "  " + obj.name + ".sendKeys(value);\n" +
+        "  }\n\n"
+      }
+    });
+
+    pom += "}";
+
 
     return pom
   }
