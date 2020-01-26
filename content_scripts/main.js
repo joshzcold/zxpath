@@ -307,10 +307,15 @@
   function getXpathData(element, selectionID) {
 
     let dataArray = new Array();
+    // Pass in functions that return xpath strings
+    // they don't have to be validated as function
+    // validateXpathData will do that for us
     const acceptable = [
       getXpathAttribute(element,"id"),
       getXpathAttribute(element,"name"),
+      getXpathInnerText(element),
       getXpathAttribute(element,"alt"),
+      getXpathAttribute(element,"class"),
       getXpathAttribute(element,"value"),
       getXpathAttribute(element,"title"),
       getXpathAttribute(element,"src"),
@@ -333,6 +338,12 @@
     });
 
     return validateXpathData(dataArray, element.nodeName, selectionID);
+  }
+
+  function getXpathInnerText(element){
+    let value = element.innerText
+    let xpath = '//' + element.nodeName.toLowerCase() + `[text() = "${value}"]`
+    return xpath
   }
 
   function getXpathAttribute(element, attribute){
