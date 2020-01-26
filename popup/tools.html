@@ -3,138 +3,140 @@
 <html>
 
 
-<head>
-  <meta charset="utf-8">
-  <link rel="stylesheet" href="tools.css" />
-  <script src="tools.js"></script>
-</head>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="tools.css" />
+    <link rel="stylesheet" href="../lib/bootstrap-4.4.1-dist/css/bootstrap.css" crossorigin="anonymous">
+    <script src="tools.js"></script>
+    <script src="../lib/jquery-3.4.1.min.js"></script>
+    <script src="../lib/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
+  </head>
 
-<body>
-  <div id="popup-content">
-    <div id="popup-buttons">
-      <div class="button select" href="#">
-        <img class="select" src="../icons/select.svg"></img>
-      </div>
-      <div class="button settings" href="#">
+  <body>
+    <div id="popup-content">
+      <div id="popup-buttons">
+        <div class="button select" href="#">
+          <img class="select" src="../icons/select.svg"></img>
+        </div>
+        <div class="button settings" href="#">
           <img class="settings" src="../icons/settings.svg"></img>
         </div>
+      </div>
     </div>
 
-    <div class="collapse" id="downloadModal">
+    <div class="card card-body download-modal-body">
 
-      <div class="card card-body download-modal-body">
+      <div class="modal-section" id="download-type">
 
-        <div class="modal-section" id="download-type">
+        <h5>Save As</h5>
 
-          <h5>Save As</h5>
-
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="downloadType" id="downloadTypeRaw" value="raw" >
-            <label class="form-check-label" for="downloadTypeRaw">
-              Raw
-            </label>
-          </div>
-
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="downloadType" id="downloadTypeFile" value="file">
-            <label class="form-check-label" for="downloadTypeFile">
-              File
-            </label>
-          </div>
-
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="downloadType" id="downloadTypeRaw" value="raw" >
+          <label class="form-check-label" for="downloadTypeRaw">
+            Raw
+          </label>
         </div>
 
-        <div class="modal-section" id="language">
-
-          <h5>Choose Language</h5>
-
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="programLanguage" id="programLanguageJava" value="java"
-              >
-            <label class="form-check-label" for="programLanguageJava">
-              Java
-            </label>
-          </div>
-
-          <div class="form-check">
-            <input class="form-check-input" type="radio" name="programLanguage" id="programLanguagePython"
-              value="python">
-            <label class="form-check-label" for="programLanguagePython">
-              Python
-            </label>
-          </div>
-
-          <div class="form-check">
-              <input class="form-check-input" type="radio" name="programLanguage" id="programLanguageCSharp"
-                value="CSharp">
-              <label class="form-check-label" for="programLanguageCSharp">
-                C#
-              </label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="programLanguage" id="programLanguagePerl"
-                  value="Perl">
-                <label class="form-check-label" for="programLanguagePerl">
-                  Perl
-                </label>
-              </div>
-
-              <div class="form-check">
-                  <input class="form-check-input" type="radio" name="programLanguage" id="programLanguagePHP"
-                    value="PHP">
-                  <label class="form-check-label" for="programLanguagePHP">
-                    PHP
-                  </label>
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" type="radio" name="programLanguage" id="programLanguageRuby"
-                      value="Ruby">
-                    <label class="form-check-label" for="programLanguageRuby">
-                      Ruby
-                    </label>
-                  </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="downloadType" id="downloadTypeFile" value="file">
+          <label class="form-check-label" for="downloadTypeFile">
+            File
+          </label>
         </div>
 
-
-        <div class="modal-section" id="output-type">
-          
-            <h5>Result Type</h5>
-  
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="output-type" id="resultTypeRaw" value="raw" >
-              <label class="form-check-label" for="resultTypeRaw">
-                Raw Xpaths
-              </label>
-            </div>
-  
-            <div class="form-check">
-              <input class="form-check-input" type="radio" name="output-type" id="resultTypeVariables" value="file">
-              <label class="form-check-label" for="resultTypeVariables">
-                WebElement Variables
-              </label>
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="output-type" id="resultTypePom" value="file">
-                <label class="form-check-label" for="resultTypePom">
-                  Full Page Object Modal
-                </label>
-              </div>
-  
-          </div>
-
-        <div class="button-group">
-          <button type="button" class="btn btn-primary" id="saveToFileButton">Save</button>
-          <button type="button" class="btn btn-secondary" id="copyToClipBoardButton">
-            Copy 
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="20px" height="20px" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M10 4v2h4V4h-4zm6 0h1a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2zm0 2a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2H7v14h10V6h-1zm-7 4h6a1 1 0 0 1 0 2H9a1 1 0 1 1 0-2zm0 5h6a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2z" fill="#ffffff"/></svg>
-          </button>
-        </div>      
       </div>
 
+      <div class="modal-section" id="language">
+
+        <h5>Choose Language</h5>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="programLanguage" id="programLanguageJava" value="java"
+                                                                                                       >
+                                                                                                       <label class="form-check-label" for="programLanguageJava">
+                                                                                                         Java
+                                                                                                       </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="programLanguage" id="programLanguagePython"
+                                                                              value="python">
+          <label class="form-check-label" for="programLanguagePython">
+            Python
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="programLanguage" id="programLanguageCSharp"
+                                                                              value="CSharp">
+          <label class="form-check-label" for="programLanguageCSharp">
+            C#
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="programLanguage" id="programLanguagePerl"
+                                                                              value="Perl">
+          <label class="form-check-label" for="programLanguagePerl">
+            Perl
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="programLanguage" id="programLanguagePHP"
+                                                                              value="PHP">
+          <label class="form-check-label" for="programLanguagePHP">
+            PHP
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="programLanguage" id="programLanguageRuby"
+                                                                              value="Ruby">
+          <label class="form-check-label" for="programLanguageRuby">
+            Ruby
+          </label>
+        </div>
+      </div>
+
+
+      <div class="modal-section" id="output-type">
+
+        <h5>Result Type</h5>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="output-type" id="resultTypeRaw" value="raw" >
+          <label class="form-check-label" for="resultTypeRaw">
+            Raw Xpaths
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="output-type" id="resultTypeVariables" value="file">
+          <label class="form-check-label" for="resultTypeVariables">
+            WebElement Variables
+          </label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="output-type" id="resultTypePom" value="file">
+          <label class="form-check-label" for="resultTypePom">
+            Full Page Object Modal
+          </label>
+        </div>
+
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="btn btn-primary" id="saveToFileButton">Save</button>
+        <button type="button" class="btn btn-secondary" id="copyToClipBoardButton">
+          Copy 
+          <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true" focusable="false" width="20px" height="20px" style="-ms-transform: rotate(360deg); -webkit-transform: rotate(360deg); transform: rotate(360deg);" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path d="M10 4v2h4V4h-4zm6 0h1a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h1a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2zm0 2a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2H7v14h10V6h-1zm-7 4h6a1 1 0 0 1 0 2H9a1 1 0 1 1 0-2zm0 5h6a1 1 0 0 1 0 2H9a1 1 0 0 1 0-2z" fill="#ffffff"/></svg>
+        </button>
+      </div>      
     </div>
-</body>
+
+
+  </body>
 
 </html>

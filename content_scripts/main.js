@@ -95,6 +95,10 @@
     } else if (resultOption === "POM"){
       if(language === "JAVA"){
         fileFormatter =  getJavaPOM() 
+      } else if(language === "RUBY"){
+        fileFormatter = getRubyPOM()
+      }else if(language === "PHP"){
+        fileFormatter = getPhpPOM()
       } else if(language === "C#"){
         fileFormatter = getCSharpPOM()
       } else if(language === "PYTHON"){
@@ -128,6 +132,10 @@
     } else if (resultOption === "POM"){
       if(language === "JAVA"){
         fileFormatter =  getJavaPOM();
+      } else if(language === "RUBY"){
+        fileFormatter = getRubyPOM()
+      }else if(language === "PHP"){
+        fileFormatter = getPhpPOM()
       }else if(language === "C#"){
         fileFormatter = getCSharpPOM()
       }else if(language === "PYTHON"){
@@ -449,6 +457,36 @@
     }
   }
 
+  function getRubyPOM(){
+    let pom = "class ClassName\n\n" +
+      "  # Element Variables\n"
+
+      generateWebElements("PYTHON").forEach(element => {
+      pom += "  " + element + "\n";
+      });
+    
+      pom += "\n  # Function Calls\n";
+
+    xpathObjects.forEach(obj => {
+      if(obj.elementType === "button" || obj.elementType === "a") {
+        pom+= "  def click" + obj.name + "Button(): \n" +
+        "   " + obj.name + ".click();\n" +
+        "  end\n\n"
+      }
+
+      else if(obj.elementType === "input") {
+        pom+= "  def set" + obj.name + "Field(value): \n" +
+        "   " + obj.name + ".clear();\n" +
+        "   " + obj.name + ".sendKeys(value);\n" +
+        "  end\n\n"
+      }
+    });
+
+    pom += "end";
+
+    return pom
+  }
+
   function getPythonPOM(){
     let pom = "class ClassName():\n\n" +
       "   # Element Variables\n"
@@ -476,6 +514,38 @@
 
     return pom
   }
+
+    function getPhpPOM() {
+    let pom = "public class ClassName {\n\n" +
+
+      "  // Element Variables  \n";
+    generateWebElements("PHP").forEach(element => {
+      pom += "  " + element + "\n";
+    });
+
+    pom += "\n  // Function Calls  \n";
+
+    xpathObjects.forEach(obj => {
+      if(obj.elementType === "button" || obj.elementType === "a") {
+        pom+= "  public void click" + obj.name + "Button() {\n" +
+        "  " + obj.name + ".click();\n" +
+        "  }\n\n"
+      }
+
+      else if(obj.elementType === "input") {
+        pom+= "  public void set" + obj.name + "Field(String value) {\n" +
+        "  " + obj.name + ".clear();\n" +
+        "  " + obj.name + ".sendKeys(value);\n" +
+        "  }\n\n"
+      }
+    });
+
+    pom += "}";
+
+
+    return pom
+  }
+
 
   function getCSharpPOM() {
     let pom = "public class ClassName {\n\n" +
