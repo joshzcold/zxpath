@@ -1,8 +1,3 @@
-
-const browserAppData = this.browser || this.chrome;
-
-let downloadMessage
-
 /**
 * Listen for clicks on the buttons, and send the appropriate message to
 * the content script in the page.
@@ -14,9 +9,9 @@ function listenForClicks() {
      * specifically looking for elements in tools.html
      */
     if (e.target.classList.contains("select")) {
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
             command: "select"
           });
           window.close();
@@ -25,9 +20,9 @@ function listenForClicks() {
     } 
 
     if (e.target.classList.contains("settings")) {
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
             command: "settings"
           });
         });
@@ -36,9 +31,9 @@ function listenForClicks() {
 
     if(e.target.id === "downloadTypeRaw"){
       console.log("downloadTypeRaw")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         downloadType: "raw"
           });
@@ -48,9 +43,9 @@ function listenForClicks() {
 
     if(e.target.id === "downloadTypeFile"){
       console.log("downloadTypeFile")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         downloadType: "file"
           });
@@ -60,9 +55,9 @@ function listenForClicks() {
 
     if(e.target.id === "resultTypeRaw"){
       console.log("resultTypeRaw")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         result: "XPATH"
           });
@@ -72,9 +67,9 @@ function listenForClicks() {
 
     if(e.target.id === "resultTypeVariables"){
       console.log("resultTypeVariables")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         result: "VAR"
           });
@@ -84,9 +79,9 @@ function listenForClicks() {
 
     if(e.target.id === "resultTypePom"){
       console.log("resultTypePom")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         result: "POM"
           });
@@ -96,9 +91,9 @@ function listenForClicks() {
 
     if(e.target.id === "programLanguageJava"){
       console.log("programLanguageJava")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "JAVA"
           });
@@ -107,9 +102,9 @@ function listenForClicks() {
     }
     if(e.target.id === "programLanguagePython"){
       console.log("programLanguagePython")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "PYTHON"
           });
@@ -119,9 +114,9 @@ function listenForClicks() {
 
     if(e.target.id === "programLanguageCSharp"){
       console.log("programLanguageCSharp")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "C#"
           });
@@ -130,9 +125,9 @@ function listenForClicks() {
     }
     if(e.target.id === "programLanguagePHP"){
       console.log("programLanguagePHP")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "PHP"
           });
@@ -141,9 +136,9 @@ function listenForClicks() {
     }
     if(e.target.id === "programLanguagePerl"){
       console.log("programLanguagePerl")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "PERL"
           });
@@ -152,9 +147,9 @@ function listenForClicks() {
     }
     if(e.target.id === "programLanguageRuby"){
       console.log("programLanguageRuby")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
         command: "changeDownload",
         language: "RUBY"
           });
@@ -164,9 +159,9 @@ function listenForClicks() {
     
     if(e.target.id === "saveToFileButton"){
       console.log("saveToFileButton")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
             command: "saveToFile"
           });
         });
@@ -174,9 +169,9 @@ function listenForClicks() {
     }
     if(e.target.id === "copyToClipBoardButton"){
       console.log("copyToClipBoardButton")
-      browserAppData.tabs.query({ active: true, currentWindow: true }, function(result){
+      chrome.tabs.query({ active: true, currentWindow: true }, function(result){
         result.forEach(function(tab) {
-          browserAppData.tabs.sendMessage(tab.id, {
+          chrome.tabs.sendMessage(tab.id, {
             command: "copyToClipBoard"
           });
         });
@@ -194,11 +189,11 @@ function reportExecuteScriptError(error) {
 }
 
 function startPopper(){
-  browserAppData.tabs.executeScript({ file: "/lib/popper.min.js" })
+  chrome.tabs.executeScript({ file: "/lib/popper.min.js" })
 }
 
 function startBootStrap(){
-browserAppData.tabs.executeScript({ file: "/lib/bootstrap-4.4.1-dist/js/bootstrap.min.js" })
+chrome.tabs.executeScript({ file: "/lib/bootstrap-4.4.1-dist/js/bootstrap.min.js" })
 }
 
 /**
@@ -206,12 +201,14 @@ browserAppData.tabs.executeScript({ file: "/lib/bootstrap-4.4.1-dist/js/bootstra
 * and add a click handler.
 * If we couldn't inject the script, handle the error.
 */
-browserAppData.tabs.executeScript({ file: "/lib/FileSaver.js" })
-browserAppData.tabs.executeScript({ file: "/lib/jquery-3.4.1.min.js" })
+chrome.tabs.executeScript({ file: "/lib/FileSaver.js" })
+chrome.tabs.executeScript({ file: "/lib/jquery-3.4.1.min.js" })
 startPopper()
 startBootStrap()
-browserAppData.tabs.executeScript({ file: "/content_scripts/main.js" })
-browserAppData.tabs.executeScript({ file: "/content_scripts/select.js" })
+chrome.tabs.executeScript({ file: "/content_scripts/main.js" })
+chrome.tabs.executeScript({ file: "/content_scripts/select.js" })
+chrome.tabs.insertCSS({ file: "/lib/main.css"})
+chrome.tabs.insertCSS({ file: "/lib/bootstrap-4.4.1-dist/css/bootstrap.min.css"})
 listenForClicks()
 
 

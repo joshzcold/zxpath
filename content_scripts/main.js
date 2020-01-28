@@ -260,9 +260,9 @@
       let iconPath = browserAppData.runtime.getURL("icons/popup_button.svg")
       let html = `
     <div class="dropdown" id="zxpath-popup" ">
-        <button class="btn btn-secondary" type="button" id="zxpath-popup-icon" data-toggle="dropdown"
+        <button class="zxpath-popup-button" type="button" id="zxpath-popup-button" data-toggle="dropdown"
             aria-haspopup="true" aria-expanded="true">
-          <img class="settings" id="zxpath-popup-icon-x" src="${iconPath}"></img>
+          <img class="zxpath-popup-icon" id="zxpath-popup-icon-x" src="${iconPath}"></img>
         </button>
 
 
@@ -348,7 +348,6 @@
     ];
 
     acceptable.forEach(value => {
-      console.log("value from accptable array",value)
       dataArray.push(value);
     });
 

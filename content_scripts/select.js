@@ -231,7 +231,7 @@ var xPathFinder =
       let iconPath = browserAppData.runtime.getURL("icons/close.svg")
         let closeSelectorButton = `
           <div class="zxpath-close-selector" id="zxpath-close-selector-div">
-          <button  type="button" class="btn btn-danger zxpath-close-selector-button" id="zxpath-close-selector-button">
+          <button type="button" class="btn-danger zxpath-close-selector-button" id="zxpath-close-selector-button">
           <p class="zxpath-close-selector-text" id="zxpath-close-selector-text">Close Selector</p>
           <img class="zxpath-close-icon" id="zxpath-close-selector-icon" src="${iconPath}"></img>
           </button>
