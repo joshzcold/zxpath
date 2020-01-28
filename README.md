@@ -1,7 +1,9 @@
 # zxpath
-Get Ze-Xpath
+![zxpath icon](/icons/icon128.png)
 
-Xpath generator extension like the others, but with the purpose of generating code for use with Selenium (or other web driver programs). You can create raw xpaths, webelement variables, or full page object models in your preferred language. 
+> Get Ze-Xpath
+
+Xpath extension like the others, but with the purpose of generating code for use with Selenium (or other web driver programs). You can create raw xpaths, webelement variables, or full page object models in your preferred language. 
 
 # Contributers
 - Joshua Cold -> joshuajcold@outlook.com
