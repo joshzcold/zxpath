@@ -6,8 +6,6 @@
 
   let xpathObjects = new Array();
 
-  const browserAppData = this.browser || this.chrome;
-
   let downloadOptions = {
     downloadType: "raw",
     language: "JAVA",
@@ -23,7 +21,7 @@
   }
 
   function notifyBackgroundPage() {
-    var sending = browserAppData.runtime.sendMessage({
+    var sending = chrome.runtime.sendMessage({
       greeting: "Greeting from the content script"
     });
     sending.then(handleResponse, handleError);
@@ -169,7 +167,7 @@
   /**
    * Listening for main toolbar button presses
    */
-  browserAppData.runtime.onMessage.addListener(message => {
+  chrome.runtime.onMessage.addListener(message => {
     if (message.command === "download") {
       downloadPopup();
     } else if (message.command === "settings") {
@@ -257,7 +255,7 @@
 
     }else{
       // have to use browser api to get svg stored in web_acessible_resources
-      let iconPath = browserAppData.runtime.getURL("icons/popup_button.svg")
+      let iconPath = chrome.runtime.getURL("icons/popup_button.svg")
       let html = `
     <div class="dropdown" id="zxpath-popup" ">
         <button class="zxpath-popup-button" type="button" id="zxpath-popup-button" data-toggle="dropdown"
